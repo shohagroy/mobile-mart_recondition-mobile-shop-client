@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import app from "../Firebase/Firebase";
 import {
   createUserWithEmailAndPassword,
@@ -8,10 +8,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { useEffect } from "react";
-import { useState } from "react";
 
-// export AuthContex = createContext
 export const AuthContex = createContext();
 const GobalAuthProvaider = ({ children }) => {
   const [user, setUser] = useState({});
@@ -60,7 +57,7 @@ const GobalAuthProvaider = ({ children }) => {
     return () => unSubscribe();
   }, []);
 
-  const authInfo = { createUser, updateUser, user, logOut, login, loader };
+  const authInfo = { createUser, updateUser };
   return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };
 

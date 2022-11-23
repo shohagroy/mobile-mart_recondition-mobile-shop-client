@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const [authError, setAuthError] = useState("");
-  const { login } = useContext(AuthContex);
+  // const { login } = useContext(AuthContex);
 
   // const navigate = useNavigate();
   // const location = useLocation();
