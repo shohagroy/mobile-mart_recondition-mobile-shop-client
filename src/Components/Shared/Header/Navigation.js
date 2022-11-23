@@ -63,6 +63,11 @@ const Navigation = () => {
                   Dashbord
                 </button>
               </Link>
+              <Link to="/login">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Login
+                </button>
+              </Link>
             </div>
           </div>
           <div className="flex-none">
