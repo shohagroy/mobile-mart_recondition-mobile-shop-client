@@ -3,11 +3,24 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/logo_1.png";
 
 const Navigation = () => {
+  const menu = (
+    <>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+    </>
+  );
   return (
     <section className="max-w-7xl mx-auto">
       <div className="navbar bg-base-100">
         <div className="navbar-start">
-          <div className="dropdown">
+          <div className="dropdown md:hidden">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -29,15 +42,7 @@ const Navigation = () => {
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li>
-                <a>Homepage</a>
-              </li>
-              <li>
-                <a>Portfolio</a>
-              </li>
-              <li>
-                <a>About</a>
-              </li>
+              {menu}
             </ul>
           </div>
           <Link to="/">
@@ -46,7 +51,20 @@ const Navigation = () => {
         </div>
         <div className="navbar-center"></div>
         <div className="navbar bg-base-100">
-          <div className="flex-1"></div>
+          <div className="flex-1 text-center">
+            <div className="ml-72 hidden md:block">
+              <Link to="/">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Home
+                </button>
+              </Link>
+              <Link to="/dashbord">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Dashbord
+                </button>
+              </Link>
+            </div>
+          </div>
           <div className="flex-none">
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
