@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import useAdmin from "../../Shared/UseAdmin/useAdmin";
+import UseSeller from "../../Shared/UseSeller/UseSeller";
 
 const Dashbord = () => {
   const { user } = useContext(AuthContex);
   const [isAdmin] = useAdmin(user?.email);
+  const [isSeller] = UseSeller(user?.email);
 
   console.log(isAdmin);
 
@@ -21,16 +23,21 @@ const Dashbord = () => {
       </div>
       <div className="flex">
         <div className="w-[300px] flex flex-col items-center border-r-2 min-h-[500px] ">
-          <Link to="my-product">
-            <button className="btn  btn-outline btn-sm border-none">
-              My Product
-            </button>
-          </Link>
-          <Link to="add-product">
-            <button className="btn btn-outline btn-sm border-none">
-              Add Product
-            </button>
-          </Link>
+          {isSeller && (
+            <>
+              <Link to="my-product">
+                <button className="btn  btn-outline btn-sm border-none">
+                  My Product
+                </button>
+              </Link>
+              <Link to="add-product">
+                <button className="btn btn-outline btn-sm border-none">
+                  Add Product
+                </button>
+              </Link>
+            </>
+          )}
+
           {isAdmin && (
             <>
               <Link to="all-product">

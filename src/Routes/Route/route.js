@@ -12,6 +12,7 @@ import Signup from "../../Components/Pages/Signup/Signup";
 import Main from "../../Layout/Main";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import SellerRoute from "../SellerRoute/SellerRoute";
 
 const route = createBrowserRouter([
   {
@@ -39,9 +40,30 @@ const route = createBrowserRouter([
           </PrivateRoute>
         ),
         children: [
-          { path: "/dashbord/my-product", element: <MyProduct /> },
-          { path: "/dashbord/add-product", element: <AddProduct /> },
-          { path: "/dashbord/all-product", element: <AllProduct /> },
+          {
+            path: "/dashbord/my-product",
+            element: (
+              <SellerRoute>
+                <MyProduct />
+              </SellerRoute>
+            ),
+          },
+          {
+            path: "/dashbord/add-product",
+            element: (
+              <SellerRoute>
+                <AddProduct />
+              </SellerRoute>
+            ),
+          },
+          {
+            path: "/dashbord/all-product",
+            element: (
+              <AdminRoute>
+                <AllProduct />
+              </AdminRoute>
+            ),
+          },
           {
             path: "/dashbord/manage-user",
             element: (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const useAdmin = (email) => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [adminloading, setadminLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:5000/chekAdmin/${email}`, {
@@ -13,13 +13,13 @@ const useAdmin = (email) => {
       .then((res) => res.json())
       .then((data) => {
         if (!data.isAdmin) {
-          setIsAdmin(false);
+          setadminLoading(false);
         }
         setIsAdmin(data.isAdmin);
-        setLoading(false);
+        setadminLoading(false);
       });
   }, [email]);
-  return [isAdmin, loading];
+  return [isAdmin, adminloading];
 };
 
 export default useAdmin;
