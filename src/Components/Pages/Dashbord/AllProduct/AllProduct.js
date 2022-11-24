@@ -32,10 +32,7 @@ const AllProduct = () => {
     return <LoadingLoader />;
   }
 
-  console.log(allProducts);
-
   const removeProductHandelar = (id) => {
-    console.log(id);
     swal({
       title: "Are you sure?",
       text: "Once deleted, not be able to recover this Product!",
