@@ -128,6 +128,69 @@ const ManageUser = () => {
     });
   };
 
+  const makeAdminHandelar = (id) => {
+    console.log(id);
+    swal({
+      title: "Are you sure?",
+      text: "Set Admin Role in This User!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(`http://localhost:5000/make-admin?email=${user.email}&id=${id}`, {
+          method: "PUT",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.modifiedCount) {
+              refetch();
+              swal("Create Admin Role Successfully!", {
+                icon: "success",
+              });
+            }
+          });
+      } else {
+      }
+    });
+  };
+
+  const removeAdminHandelar = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Remove Admin Role in This User!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(
+          `http://localhost:5000/remove-admin?email=${user.email}&id=${id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.modifiedCount) {
+              refetch();
+              swal("Remove Admin Role Successfully!", {
+                icon: "success",
+              });
+            }
+          });
+      } else {
+      }
+    });
+  };
+
   return (
     <section className="w-full">
       <h3 className="text-2xl text-center capitalize  md:text-left mx-4  font-semibold text-accent">
@@ -158,7 +221,7 @@ const ManageUser = () => {
                   <option value="customer">Buyers</option>
                 </select>
               </th>
-              <th>Make Admin</th>
+              <th>make admin</th>
               <th>Deleted</th>
             </tr>
           </thead>
@@ -222,8 +285,22 @@ const ManageUser = () => {
                   )}
                 </td>
                 <td>{user.role}</td>
-                <td className="text-primary font-bold">
-                  <button>Make Admin</button>
+                <td>
+                  {user.role === "admin" ? (
+                    <button
+                      onClick={() => removeAdminHandelar(user._id)}
+                      className="btn btn-sm bg-primary text-white"
+                    >
+                      remove Admin
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => makeAdminHandelar(user._id)}
+                      className="btn btn-sm bg-green-600 text-white"
+                    >
+                      Make Admin
+                    </button>
+                  )}
                 </td>
                 <td>
                   <button
