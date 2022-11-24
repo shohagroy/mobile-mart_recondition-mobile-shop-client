@@ -81,7 +81,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="w-full">
+    <section className="w-full">
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
         Add Products
       </h3>
@@ -265,7 +265,7 @@ const AddProduct = () => {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 
