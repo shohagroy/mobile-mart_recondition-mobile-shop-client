@@ -4,8 +4,13 @@ import { Link, Outlet } from "react-router-dom";
 const Dashbord = () => {
   return (
     <section className="max-w-7xl mx-auto min-h-[500px]">
-      <div>
+      <div className="flex justify-between items-center">
         <h3 className="text-3xl font-bold text-accent py-3">Dashbord</h3>
+        <div>
+          <p className="text-2xl py-2 px-4 bg-primary text-white font-semibold border-2 rounded-xl mx-2">
+            {new Date().toDateString()}
+          </p>
+        </div>
       </div>
       <div className="flex">
         <div className="w-[300px] border-r-2 min-h-[500px] ">

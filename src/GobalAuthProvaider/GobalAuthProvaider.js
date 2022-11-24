@@ -57,7 +57,7 @@ const GobalAuthProvaider = ({ children }) => {
     return () => unSubscribe();
   }, []);
 
-  const authInfo = { createUser, updateUser };
+  const authInfo = { user, logOut, createUser, updateUser, login };
   return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };
 

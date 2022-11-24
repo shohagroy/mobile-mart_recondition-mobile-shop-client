@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo_1.png";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const Navigation = () => {
+  const { user, logOut } = useContext(AuthContex);
+
   const menu = (
     <>
       <li>
@@ -63,11 +66,21 @@ const Navigation = () => {
                   Dashbord
                 </button>
               </Link>
-              <Link to="/login">
-                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                  Login
+
+              {user.email ? (
+                <button
+                  onClick={logOut}
+                  className="text-xl mx-2 text-accent hover:text-primary font-semibold "
+                >
+                  Log Out
                 </button>
-              </Link>
+              ) : (
+                <Link to="/login">
+                  <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                    Login
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex-none">

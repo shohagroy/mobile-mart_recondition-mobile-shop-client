@@ -2,18 +2,51 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const [authError, setAuthError] = useState("");
-  // const { login } = useContext(AuthContex);
+  const [loading, setLoading] = useState(false);
+  const { login } = useContext(AuthContex);
 
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const path = location.state?.path?.pathname || "/";
+  const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.state?.path?.pathname || "/";
 
   const handelLogin = (data) => {
-    console.log(data);
+    setLoading(true);
+    setAuthError("");
+    login(data.email, data.password)
+      .then((result) => {
+        const user = result.user;
+
+        const userEmail = { email: user.email };
+
+        if (userEmail) {
+          fetch(`http://localhost:5000/jwt`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(userEmail),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.jwtToken) {
+                localStorage.setItem("mobile-mart", data.jwtToken);
+                console.log(data);
+                setLoading(false);
+                navigate(path, { relative: true });
+              }
+            });
+        }
+      })
+      .catch((err) => {
+        setAuthError(err.code.slice(5));
+        setLoading(false);
+        console.error(err.code.slice(5));
+      });
   };
 
   return (
@@ -53,23 +86,26 @@ const Login = () => {
               <p className="text-center font-bold text-red-600">{authError}</p>
             </div>
             <div className="mt-4">
-              <input
+              <button
                 type="submit"
-                value="Login"
-                className="input btn bg-accent input-bordered w-full"
-              />
+                className={`input bg-primary text-white btn bg-accent input-bordered w-full ${
+                  loading && "loading"
+                }`}
+              >
+                {loading ? "Loading..." : "Login"}
+              </button>
             </div>
             <div>
               <p className="label-text text-center mt-2">
                 New to Mobile Mart?
-                <Link to="../signup" className="text-secondary pl-2 font-bold">
+                <Link to="../signup" className="text-primary pl-2 font-bold">
                   Create new account
                 </Link>
               </p>
             </div>
           </form>
           <div className="divider my-4">OR</div>
-          <button className="btn btn-outline w-full">
+          <button className="btn hover:bg-primary btn-outline w-full">
             CONTINUE WITH GOOGLE
           </button>
         </div>
@@ -78,34 +114,34 @@ const Login = () => {
   );
 
   // const handelLogin = (data) => {
-  //   setAuthError("");
-  //   login(data.email, data.password)
-  //     .then((result) => {
-  //       const user = result.user;
+  // setAuthError("");
+  // login(data.email, data.password)
+  //   .then((result) => {
+  //     const user = result.user;
 
-  //       const userEmail = { email: user.email };
+  //     const userEmail = { email: user.email };
 
-  //       if (userEmail) {
-  //         fetch(`http://localhost:5000/jwt`, {
-  //           method: "POST",
-  //           headers: {
-  //             "content-type": "application/json",
-  //           },
-  //           body: JSON.stringify(userEmail),
-  //         })
-  //           .then((res) => res.json())
-  //           .then((data) => {
-  //             if (data.jwtToken) {
-  //               localStorage.setItem("mobile-mart", data.jwtToken);
-  //               // navigate(path, { relative: true });
-  //             }
-  //           });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setAuthError(err.code.slice(5));
-  //       console.error(err.code.slice(5));
-  //     });
+  //     if (userEmail) {
+  //       fetch(`http://localhost:5000/jwt`, {
+  //         method: "POST",
+  //         headers: {
+  //           "content-type": "application/json",
+  //         },
+  //         body: JSON.stringify(userEmail),
+  //       })
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           if (data.jwtToken) {
+  //             localStorage.setItem("mobile-mart", data.jwtToken);
+  //             // navigate(path, { relative: true });
+  //           }
+  //         });
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     setAuthError(err.code.slice(5));
+  //     console.error(err.code.slice(5));
+  //   });
   // };
 
   // return (
