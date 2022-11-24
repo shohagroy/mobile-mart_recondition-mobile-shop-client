@@ -44,18 +44,15 @@ const AllProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(
-          `http://localhost:5000/all-product?email=${user.email}&id=${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-          }
-        )
+        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
           .then((res) => res.json())
           .then((data) => {
-            if (data.deletedCount) {
+            if (data.deletedCount > 0) {
               refetch();
               swal("Poof! Your Product has been deleted!", {
                 icon: "success",
