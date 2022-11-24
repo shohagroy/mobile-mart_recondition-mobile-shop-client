@@ -3,6 +3,7 @@ import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import { useQuery } from "@tanstack/react-query";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import swal from "sweetalert";
+import { Link } from "react-router-dom";
 
 const ManageUser = () => {
   const { user } = useContext(AuthContex);
@@ -31,8 +32,7 @@ const ManageUser = () => {
     return <LoadingLoader />;
   }
 
-  const removeUserHandelar = (id) => {
-    console.log(id);
+  const removeUserHandelar = (id, email) => {
     swal({
       title: "Are you sure?",
       text: "Once deleted, not be able to recover this Product!",
@@ -41,12 +41,15 @@ const ManageUser = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/users?email=${user.email}&id=${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `http://localhost:5000/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
+          {
+            method: "DELETE",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
@@ -65,7 +68,7 @@ const ManageUser = () => {
   return (
     <section className="w-full">
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
-        My Product -<strong className="text-primary">{users?.length}</strong>
+        All User -<strong className="text-primary">{users?.length}</strong>
       </h3>
 
       <div className="overflow-x-auto my-10">
@@ -74,49 +77,45 @@ const ManageUser = () => {
             <tr>
               <th></th>
               <th>Images</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Advertise</th>
-              <th>Status</th>
+              <th>name</th>
+              <th>email</th>
+              <th>role</th>
+              <th>Make Admin</th>
               <th>Deleted</th>
             </tr>
           </thead>
           <tbody>
-            {/* {products?.map((product, i) => (
-          <tr key={i}>
-            <th>{i + 1}</th>
-            <td>
-              <div className="avatar">
-                <div className="w-28 mask mask-squircle">
-                  <img
-                    src="https://placeimg.com/192/192/people"
-                    alt={product?.productName}
-                  />
-                </div>
-              </div>
-            </td>
-            <td>
-              <Link className="hover:text-primary">
-                {product?.productName}
-              </Link>
-            </td>
-            <td className="text-primary font-semibold">
-              ${product?.sellPrice}
-            </td>
-            <td>
-              <button className="btn btn-sm">Advertise</button>
-            </td>
-            <td className="text-primary font-bold">Unsole</td>
-            <td>
-              <button
-                onClick={() => removeProductHandelar(product._id)}
-                className="btn btn-sm bg-red-600 text-white"
-              >
-                Remove
-              </button>
-            </td>
-          </tr>
-        ))} */}
+            {users?.map((user, i) => (
+              <tr key={i}>
+                <th>{i + 1}</th>
+                <td>
+                  <div className="avatar">
+                    <div className="w-24 rounded-full border-2 border-primary">
+                      <img
+                        src="https://placeimg.com/192/192/people"
+                        alt={user?.name}
+                      />
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <Link className="hover:text-primary">{user?.name}</Link>
+                </td>
+                <td className="font-semibold">{user?.email}</td>
+                <td>{user.role}</td>
+                <td className="text-primary font-bold">
+                  <button>Make Admin</button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => removeUserHandelar(user._id, user.email)}
+                    className="btn btn-sm bg-red-600 text-white"
+                  >
+                    deleted
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
