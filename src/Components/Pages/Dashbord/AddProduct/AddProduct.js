@@ -4,11 +4,13 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContex);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const imgbbHostKey = process.env.REACT_APP_imgbb_host_key;
 
@@ -20,9 +22,9 @@ const AddProduct = () => {
 
   const addProductHandelar = (data) => {
     setLoading(true);
-    const productImages = data.images[0];
     const fromData = new FormData();
-    fromData.append("images", productImages);
+    const productImages = data.images[0];
+    fromData.append("image", productImages);
 
     const url = `https://api.imgbb.com/1/upload?key=${imgbbHostKey}`;
 
@@ -32,8 +34,8 @@ const AddProduct = () => {
     })
       .then((res) => res.json())
       .then((imgData) => {
-        if (imgData) {
-          console.log(imgData);
+        console.log(imgData);
+        if (imgData.success) {
           const productInfo = {
             seller: user.displayName,
             sellerEmail: user.email,
@@ -45,16 +47,10 @@ const AddProduct = () => {
             purchaseDate: data.purchaseDate,
             location: data.location,
             phone: data.phone,
-            images: productImages,
+            images: imgData.data.url,
             description: value,
             postDate: new Date().toLocaleDateString(),
           };
-          console.log(productInfo);
-          // swal(
-          //   "Successfull!",
-          //   `You Product ${data.productName} has Added!`,
-          //   "success"
-          // );
 
           fetch(`http://localhost:5000/products?email=${user.email}`, {
             method: "POST",
@@ -67,12 +63,12 @@ const AddProduct = () => {
             .then((res) => res.json())
             .then((data) => {
               if (data.insertedId) {
-                console.log(data);
                 swal(
                   "Successfull!",
                   `You Product ${productInfo.productName} has Added!`,
                   "success"
                 );
+                navigate("../my-product");
                 setLoading(false);
               }
             });

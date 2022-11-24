@@ -88,11 +88,8 @@ const MyProduct = () => {
                 <th>{i + 1}</th>
                 <td>
                   <div className="avatar">
-                    <div className="w-28 mask mask-squircle">
-                      <img
-                        src="https://placeimg.com/192/192/people"
-                        alt={product?.productName}
-                      />
+                    <div className="w-28 rounded-lg">
+                      <img src={product?.images} alt={product?.productName} />
                     </div>
                   </div>
                 </td>
