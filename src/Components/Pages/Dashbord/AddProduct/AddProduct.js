@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
+import swal from "sweetalert";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContex);
@@ -10,8 +11,6 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
 
   const imgbbHostKey = process.env.REACT_APP_imgbb_host_key;
-
-  console.log(imgbbHostKey);
 
   const {
     register,
@@ -51,12 +50,31 @@ const AddProduct = () => {
             postDate: new Date().toLocaleDateString(),
           };
           console.log(productInfo);
+          // swal(
+          //   "Successfull!",
+          //   `You Product ${data.productName} has Added!`,
+          //   "success"
+          // );
 
-          fetch(`http://localhost:5000/`)
+          fetch(`http://localhost:5000/products?email=${user.email}`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+            body: JSON.stringify(productInfo),
+          })
             .then((res) => res.json())
             .then((data) => {
-              console.log(data);
-              setLoading(false);
+              if (data.insertedId) {
+                console.log(data);
+                swal(
+                  "Successfull!",
+                  `You Product ${productInfo.productName} has Added!`,
+                  "success"
+                );
+                setLoading(false);
+              }
             });
         }
       });
@@ -64,13 +82,15 @@ const AddProduct = () => {
 
   return (
     <div className="w-full">
-      <h3 className="text-2xl font-semibold text-accent">Add Products</h3>
+      <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
+        Add Products
+      </h3>
       <div className="w-full flex justify-center items-center">
         <form
           onSubmit={handleSubmit(addProductHandelar)}
-          className="md:w-[500px] p-4 border border-black rounded-lg"
+          className="md:w-[800px] p-4 border mx-2 my-10 border-black rounded-lg"
         >
-          <div className="form-control my-2 w-full ">
+          <div className="form-control  w-full ">
             <input
               {...register("productName", {
                 required: "Please Enter Product Name!",
@@ -98,10 +118,12 @@ const AddProduct = () => {
                 Category
               </option>
               <option value="iPhone">iPhone</option>
+              <option value="OnePluse">OnePluse</option>
               <option value="Samsung">Samsung</option>
               <option value="Vivo">Vivo</option>
               <option value="Oppo">Oppo</option>
               <option value="Realme">Realme</option>
+              <option value="Google Pixel">Google Pixel</option>
               <option value="Nokia">Nokia</option>
               <option value="Bar Phone">Bar Phone</option>
             </select>
@@ -195,13 +217,13 @@ const AddProduct = () => {
                 required: "Please Enter Your Phone Number!",
               })}
               className={`input input-bordered border-2 w-full ${
-                errors.number && "border-red-600"
+                errors.phone && "border-red-600"
               }`}
               type="text"
-              placeholder="Your Number"
+              placeholder="Your Phone Number"
             />
-            {errors.number && (
-              <p className="text-red-600"> {errors.number?.message} </p>
+            {errors.phone && (
+              <p className="text-red-600"> {errors.phone?.message} </p>
             )}
           </div>
           <div className="form-control my-2 w-full ">
