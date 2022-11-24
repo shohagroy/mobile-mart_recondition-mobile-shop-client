@@ -3,6 +3,7 @@ import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import { useQuery } from "@tanstack/react-query";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import { Link } from "react-router-dom";
+import swal from "sweetalert";
 
 const MyProduct = () => {
   const { user } = useContext(AuthContex);
@@ -33,6 +34,33 @@ const MyProduct = () => {
 
   const removeProductHandelar = (id) => {
     console.log(id);
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, not be able to recover this Product!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount) {
+              refetch();
+              swal("Poof! Your Product has been deleted!", {
+                icon: "success",
+              });
+            }
+          });
+      } else {
+        swal("Your Product is safe!");
+      }
+    });
   };
 
   return (
