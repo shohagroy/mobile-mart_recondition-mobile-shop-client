@@ -24,6 +24,11 @@ const Dashbord = () => {
               Add Product
             </button>
           </Link>
+          <Link to="manage-user">
+            <button className="btn btn-outline btn-sm border-none">
+              Manage User
+            </button>
+          </Link>
         </div>
         <div className="w-full">
           <Outlet />
