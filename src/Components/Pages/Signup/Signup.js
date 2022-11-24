@@ -58,9 +58,6 @@ const Signup = () => {
           .then(() => {
             // update user name
 
-            // const newUser = { name: user.displayName, email: user.email };
-            // databaseUser(newUser);
-
             const userEmail = { email: user.email };
             if (userEmail) {
               fetch(`http://localhost:5000/jwt`, {
@@ -73,7 +70,6 @@ const Signup = () => {
                 .then((res) => res.json())
                 .then((data) => {
                   setLoading(false);
-                  console.log(data);
                   if (data.jwtToken) {
                     localStorage.setItem("token", data.jwtToken);
                     toast.success("User Create Successfully!");

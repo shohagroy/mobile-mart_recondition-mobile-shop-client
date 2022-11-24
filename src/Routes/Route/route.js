@@ -10,6 +10,7 @@ import Home from "../../Components/Pages/Home/Home";
 import Login from "../../Components/Pages/Login/Login";
 import Signup from "../../Components/Pages/Signup/Signup";
 import Main from "../../Layout/Main";
+import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const route = createBrowserRouter([
@@ -41,7 +42,14 @@ const route = createBrowserRouter([
           { path: "/dashbord/my-product", element: <MyProduct /> },
           { path: "/dashbord/add-product", element: <AddProduct /> },
           { path: "/dashbord/all-product", element: <AllProduct /> },
-          { path: "/dashbord/manage-user", element: <ManageUser /> },
+          {
+            path: "/dashbord/manage-user",
+            element: (
+              <AdminRoute>
+                <ManageUser />
+              </AdminRoute>
+            ),
+          },
         ],
       },
     ],

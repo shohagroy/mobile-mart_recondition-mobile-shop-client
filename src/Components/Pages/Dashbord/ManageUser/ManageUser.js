@@ -216,7 +216,9 @@ const ManageUser = () => {
               <th>Verify</th>
               <th>
                 <select onChange={(event) => setRole(event.target.value)}>
-                  <option selected>All Users</option>
+                  <option selected value="">
+                    All Users
+                  </option>
                   <option value="seller">Customers</option>
                   <option value="customer">Buyers</option>
                 </select>
