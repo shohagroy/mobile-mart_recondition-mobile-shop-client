@@ -4,6 +4,7 @@ import AddProduct from "../../Components/Pages/Dashbord/AddProduct/AddProduct";
 import AllProduct from "../../Components/Pages/Dashbord/AllProduct/AllProduct";
 import Dashbord from "../../Components/Pages/Dashbord/Dashbord";
 import ManageUser from "../../Components/Pages/Dashbord/ManageUser/ManageUser";
+import MyBooking from "../../Components/Pages/Dashbord/MyBooking/MyBooking";
 import MyProduct from "../../Components/Pages/Dashbord/MyProduct/MyProduct";
 import ErrorPage from "../../Components/Pages/ErrorPage/ErrorPage";
 import Home from "../../Components/Pages/Home/Home";
@@ -25,6 +26,7 @@ const route = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        loader: () => fetch("http://localhost:5000/add-advertise"),
       },
       {
         path: "/login",
@@ -59,6 +61,10 @@ const route = createBrowserRouter([
                 <MyProduct />
               </SellerRoute>
             ),
+          },
+          {
+            path: "/dashbord/my-booking",
+            element: <MyBooking />,
           },
           {
             path: "/dashbord",

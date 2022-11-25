@@ -5,6 +5,8 @@ import "react-quill/dist/quill.snow.css";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContex);
@@ -12,22 +14,36 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [addNew, setAddNew] = useState("");
-
-  // if (addnew === "addNew") {
-  //   setAddnew(true);
-  // } else {
-  //   setAddnew(false);
-  // }
-
-  console.log(addNew);
-
   const imgbbHostKey = process.env.REACT_APP_imgbb_host_key;
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const {
+    data: categoris,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["categoris"],
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:5000/categorys?email=${user.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        }
+      );
+      const data = await res.json();
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return <LoadingLoader />;
+  }
 
   const addProductHandelar = (data) => {
     setLoading(true);
@@ -43,7 +59,6 @@ const AddProduct = () => {
     })
       .then((res) => res.json())
       .then((imgData) => {
-        console.log(imgData);
         if (imgData.success) {
           const productInfo = {
             seller: user.displayName,
@@ -101,6 +116,7 @@ const AddProduct = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
+          refetch();
           swal(
             "Successfull!",
             `You Catrgory ${category} has Added!`,
@@ -150,14 +166,13 @@ const AddProduct = () => {
               <option value="" disabled selected>
                 Category
               </option>
+              {categoris.map((category) => (
+                <option key={category._id} value={category.category}>
+                  {category.category}
+                </option>
+              ))}
               <option value="iPhone">iPhone</option>
-              <option value="OnePluse">OnePluse</option>
-              <option value="Samsung">Samsung</option>
-              <option value="Vivo">Vivo</option>
-              <option value="Oppo">Oppo</option>
-              <option value="Realme">Realme</option>
-              <option value="Google Pixel">Google Pixel</option>
-              <option value="Nokia">Nokia</option>
+
               <option value="addNew">
                 <button onClick={"click"}>+Add new</button>
               </option>

@@ -23,6 +23,11 @@ const Dashbord = () => {
       </div>
       <div className="flex">
         <div className="w-[300px] flex flex-col items-center border-r-2 min-h-[500px] ">
+          <Link to="my-booking">
+            <button className="btn  btn-outline btn-sm border-none">
+              My Booking
+            </button>
+          </Link>
           {isSeller && (
             <>
               <Link to="my-product">

@@ -33,7 +33,6 @@ const MyProduct = () => {
   }
 
   const removeProductHandelar = (id) => {
-    console.log(id);
     swal({
       title: "Are you sure?",
       text: "Once deleted, not be able to recover this Product!",
@@ -59,6 +58,69 @@ const MyProduct = () => {
           });
       } else {
         swal("Your Product is safe!");
+      }
+    });
+  };
+
+  const addAdvertiseHandelar = (addItem) => {
+    swal({
+      title: "Are you sure?",
+      text: `You want to Boost this ${addItem.productName} Product! `,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(
+          `http://localhost:5000/add-advertise?email=${user.email}&id=${addItem._id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.modifiedCount > 0) {
+              refetch();
+              swal(`Your ${addItem.productName} Product has been Boosted`, {
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
+  };
+  const removeAdvertiseHandelar = (addItem) => {
+    swal({
+      title: "Are you sure?",
+      text: `You want to Remove Boost this ${addItem.productName} Product! `,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(
+          `http://localhost:5000/remove-advertise?email=${user.email}&id=${addItem._id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.modifiedCount > 0) {
+              refetch();
+              swal(`Your ${addItem.productName} Product has been Remove!`, {
+                icon: "success",
+              });
+            }
+          });
       }
     });
   };
@@ -102,7 +164,21 @@ const MyProduct = () => {
                   ${product?.sellPrice}
                 </td>
                 <td>
-                  <button className="btn btn-sm">Advertise</button>
+                  {product.isBoosted ? (
+                    <button
+                      onClick={() => removeAdvertiseHandelar(product)}
+                      className="btn btn-primary btn-sm text-white "
+                    >
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => addAdvertiseHandelar(product)}
+                      className="btn bg-green-600 text-white btn-sm "
+                    >
+                      Advertise
+                    </button>
+                  )}
                 </td>
                 <td className="text-primary font-bold">Unsole</td>
                 <td>

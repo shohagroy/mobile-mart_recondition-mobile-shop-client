@@ -7,7 +7,7 @@ import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import LoadingLoader from "../Loader/LoadingLoader";
 
 const Navigation = () => {
-  const { user, logOut, addCart } = useContext(AuthContex);
+  const { user, logOut, addCart, loader } = useContext(AuthContex);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["data", "refetch", addCart],
@@ -25,9 +25,12 @@ const Navigation = () => {
     },
   });
 
-  if (isLoading) {
+  if (loader || isLoading) {
     return <LoadingLoader />;
   }
+  // if (isLoading) {
+  //   return <LoadingLoader />;
+  // }
 
   const cartRemoveHandelar = (id) => {
     fetch(`http://localhost:5000/add-carts?email=${user.email}&id=${id}`, {
@@ -124,14 +127,14 @@ const Navigation = () => {
                     {data?.length} Items
                   </span>
                   <div className="">
-                    {data.map((item) => (
+                    {data?.map((item) => (
                       <div
                         key={item._id}
                         className="md:w-[500px] bg-base-100 shadow-xl border hover:border-primary hover:border-2 duration-300"
                       >
                         <div className="card-body">
                           <div className="flex justify-between items-center">
-                            <Link to={item._id}>
+                            <Link to={`/product-details/${item.cartId}`}>
                               <div className="flex">
                                 <div className="avatar">
                                   <div className="w-24 rounded">
