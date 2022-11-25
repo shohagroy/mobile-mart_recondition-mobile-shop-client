@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useContext } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import LoadingLoader from "../Loader/LoadingLoader";
 
 const DisplayProduct = ({ category }) => {
+  const { user, setAddCart, addCart } = useContext(AuthContex);
   const { category: name } = category;
   const { data: fatchResult, isLoading } = useQuery({
     queryKey: ["data", category],
@@ -20,22 +23,51 @@ const DisplayProduct = ({ category }) => {
     return <LoadingLoader />;
   }
 
-  console.log(fatchResult);
+  const addTocatdHandelar = (items) => {
+    const { _id, category, images, productName, sellPrice, phone, seller } =
+      items;
+
+    const cartItems = {
+      cartId: _id,
+      productName,
+      images,
+      sellPrice,
+      phone,
+      seller,
+      category,
+    };
+
+    fetch(`http://localhost:5000/add-carts?email=${user.email}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+      body: JSON.stringify(cartItems),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          toast.success(`${cartItems.productName} Add to Cart Successfully!`);
+          setAddCart(!addCart);
+        }
+      });
+  };
   return (
     <div className={`${fatchResult.length ? "block" : "hidden"} my-10`}>
       <div>
         <h2 className="text-xl font-semibold p-2">
           Category: <span className="text-primary font-bold">{name}</span>
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fatchResult.map((category) => (
             <div
               key={category._id}
               className="card card-side border-2 bg-base-100 shadow-md"
             >
               <img
-                className="p-3 rounded-2xl"
-                src="https://placeimg.com/200/280/arch"
+                className="p-3 rounded-2xl w-[290px]"
+                src={category?.images}
                 alt="Movie"
               />
               <figure></figure>
@@ -101,7 +133,10 @@ const DisplayProduct = ({ category }) => {
                   <p>{category.postDate}</p>
                 </div>
                 <div className="card-actions justify-end">
-                  <button className="btn btn-sm btn-outline btn-primary text-white">
+                  <button
+                    onClick={() => addTocatdHandelar(category)}
+                    className="btn btn-sm btn-outline btn-primary text-white"
+                  >
                     Add to Cart
                   </button>
                   <button className="btn btn-sm btn-primary text-white">

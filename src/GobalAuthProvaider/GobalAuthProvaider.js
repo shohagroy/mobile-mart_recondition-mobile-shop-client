@@ -13,6 +13,7 @@ export const AuthContex = createContext();
 const GobalAuthProvaider = ({ children }) => {
   const [user, setUser] = useState({});
   const [loader, setLoader] = useState(true);
+  const [addCart, setAddCart] = useState(false);
 
   const auth = getAuth(app);
   // create user function
@@ -57,7 +58,16 @@ const GobalAuthProvaider = ({ children }) => {
     return () => unSubscribe();
   }, []);
 
-  const authInfo = { user, logOut, loader, createUser, updateUser, login };
+  const authInfo = {
+    setAddCart,
+    addCart,
+    user,
+    logOut,
+    loader,
+    createUser,
+    updateUser,
+    login,
+  };
   return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };
 
