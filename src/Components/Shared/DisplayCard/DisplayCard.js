@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
+import hotProduct from "../../../assets/hot_badg.webp";
+import lookinGood from "../../../assets/lokking_good.gif";
 
 const DisplayCard = ({ category }) => {
   const { user, setAddCart, addCart } = useContext(AuthContex);
@@ -42,7 +44,20 @@ const DisplayCard = ({ category }) => {
       });
   };
   return (
-    <div className="card card-side border-2 bg-base-100 shadow-md">
+    <div className="card relative card-side border-2 bg-base-100 shadow-md">
+      {category.isBoosted && (
+        <div
+          className={`absolute -top-20 -left-4 flex justify-between items-center `}
+        >
+          <img src={hotProduct} className="w-1/5" alt="Hot badge" />
+          <img
+            src={lookinGood}
+            className="w-1/6 mt-14 -mr-8 border rounded-full bg-primary"
+            alt="Hot badge"
+          />
+        </div>
+      )}
+
       <img
         className="p-3 object-cover object-fill object-contain rounded-2xl w-[290px]"
         src={category?.images}
