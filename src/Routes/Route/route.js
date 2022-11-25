@@ -8,6 +8,7 @@ import MyProduct from "../../Components/Pages/Dashbord/MyProduct/MyProduct";
 import ErrorPage from "../../Components/Pages/ErrorPage/ErrorPage";
 import Home from "../../Components/Pages/Home/Home";
 import Login from "../../Components/Pages/Login/Login";
+import ShowProduct from "../../Components/Pages/ShowProduct/ShowProduct";
 import Signup from "../../Components/Pages/Signup/Signup";
 import Main from "../../Layout/Main";
 import AdminRoute from "../AdminRoute/AdminRoute";
@@ -33,6 +34,10 @@ const route = createBrowserRouter([
         element: <Signup />,
       },
       {
+        path: "/product",
+        element: <ShowProduct />,
+      },
+      {
         path: "/dashbord",
         element: (
           <PrivateRoute>
@@ -42,6 +47,14 @@ const route = createBrowserRouter([
         children: [
           {
             path: "/dashbord/my-product",
+            element: (
+              <SellerRoute>
+                <MyProduct />
+              </SellerRoute>
+            ),
+          },
+          {
+            path: "/dashbord",
             element: (
               <SellerRoute>
                 <MyProduct />

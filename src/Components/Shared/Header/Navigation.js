@@ -66,6 +66,11 @@ const Navigation = () => {
                   Dashbord
                 </button>
               </Link>
+              <Link to="/product">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Product
+                </button>
+              </Link>
 
               {user.email ? (
                 <button

@@ -11,6 +11,15 @@ const AddProduct = () => {
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [addNew, setAddNew] = useState("");
+
+  // if (addnew === "addNew") {
+  //   setAddnew(true);
+  // } else {
+  //   setAddnew(false);
+  // }
+
+  console.log(addNew);
 
   const imgbbHostKey = process.env.REACT_APP_imgbb_host_key;
 
@@ -76,15 +85,42 @@ const AddProduct = () => {
       });
   };
 
+  const addCategoryHandelar = (event) => {
+    event.preventDefault();
+
+    const category = event.target.category.value;
+
+    fetch(`http://localhost:5000/categorys?email=${user.email}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+      body: JSON.stringify({ category }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          swal(
+            "Successfull!",
+            `You Catrgory ${category} has Added!`,
+            "success"
+          );
+          event.target.reset();
+          // setLoading(false);
+        }
+      });
+  };
+
   return (
     <section className="w-full">
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
         Add Products
       </h3>
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center relative items-center">
         <form
           onSubmit={handleSubmit(addProductHandelar)}
-          className="md:w-[800px] p-4 border mx-2 my-10 border-black rounded-lg"
+          className="md:w-[800px] p-4  border mx-2 my-10 border-black rounded-lg"
         >
           <div className="form-control  w-full ">
             <input
@@ -103,10 +139,11 @@ const AddProduct = () => {
           </div>
           <div className="form-control my-2 w-full ">
             <select
+              onClick={(event) => setAddNew(event.target.value)}
               {...register("category", {
                 required: "Please Select Product Category!",
               })}
-              className={`select select-bordered border-2 w-full ${
+              className={`select  select-bordered border-2 w-full ${
                 errors.category && "border-red-600"
               }`}
             >
@@ -121,7 +158,9 @@ const AddProduct = () => {
               <option value="Realme">Realme</option>
               <option value="Google Pixel">Google Pixel</option>
               <option value="Nokia">Nokia</option>
-              <option value="Bar Phone">Bar Phone</option>
+              <option value="addNew">
+                <button onClick={"click"}>+Add new</button>
+              </option>
             </select>
             {errors.category && (
               <p className="text-red-600"> {errors.category?.message} </p>
@@ -260,6 +299,30 @@ const AddProduct = () => {
             </button>
           </div>
         </form>
+        <div
+          className={`absolute w-100 h-full top-[0%] mt-40 left-20 ${
+            addNew && addNew === "addNew" ? "absolute" : "hidden"
+          }`}
+        >
+          <div>
+            <form
+              onSubmit={addCategoryHandelar}
+              className="flex justify-between items-center rounded-lg bg-gray-100 border-2 border-black h-full"
+            >
+              <input
+                type="text"
+                className="w-full bg-none h-100 py-2 px-4  "
+                name="category"
+                placeholder="Enter New Category"
+              />
+              <input
+                type="submit"
+                className="btn bg-primary text-white"
+                value="Add"
+              />
+            </form>
+          </div>
+        </div>
       </div>
     </section>
   );
