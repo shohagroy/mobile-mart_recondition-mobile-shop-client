@@ -10,6 +10,7 @@ import Home from "../../Components/Pages/Home/Home";
 import Login from "../../Components/Pages/Login/Login";
 import ShowProduct from "../../Components/Pages/ShowProduct/ShowProduct";
 import Signup from "../../Components/Pages/Signup/Signup";
+import CardDetails from "../../Components/Shared/CardDetails/CardDetails";
 import Main from "../../Layout/Main";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
@@ -36,6 +37,12 @@ const route = createBrowserRouter([
       {
         path: "/product",
         element: <ShowProduct />,
+      },
+      {
+        path: "/product-details/:id",
+        element: <CardDetails />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/products-details/${params.id}`),
       },
       {
         path: "/dashbord",

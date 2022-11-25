@@ -29,8 +29,6 @@ const Navigation = () => {
     return <LoadingLoader />;
   }
 
-  console.log(data);
-
   const cartRemoveHandelar = (id) => {
     fetch(`http://localhost:5000/add-carts?email=${user.email}&id=${id}`, {
       method: "DELETE",

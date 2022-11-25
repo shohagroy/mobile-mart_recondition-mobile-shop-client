@@ -106,7 +106,10 @@ const DisplayProduct = ({ category }) => {
                         __html: category.description.slice(0, 250),
                       }}
                     />
-                    <Link className="text-primary font-semibold">
+                    <Link
+                      to={`../product-details/${category._id}`}
+                      className="text-primary font-semibold"
+                    >
                       Read More...
                     </Link>
                   </p>
