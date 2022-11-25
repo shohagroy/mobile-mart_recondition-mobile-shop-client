@@ -57,15 +57,11 @@ const Navigation = () => {
     <section className="max-w-7xl mx-auto">
       <div className="navbar bg-base-100">
         <div className="navbar bg-base-100">
-          <div className="flex-1 bg-red-300 ">
+          <div className="flex-1">
             <div className="hidden md:block">
               <div>
                 <Link to="/">
-                  <img
-                    className="  md:w-[150px] lg:ml-10"
-                    src={logo}
-                    alt="Logo"
-                  />
+                  <img className="  md:w-[150px]" src={logo} alt="Logo" />
                 </Link>
               </div>
             </div>

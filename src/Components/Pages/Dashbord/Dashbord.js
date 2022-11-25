@@ -10,7 +10,7 @@ const Dashbord = () => {
   const [isSeller] = UseSeller(user?.email);
 
   return (
-    <section className="max-w-7xl mx-auto min-h-[500px]">
+    <section className="max-w-7xl p-4 mx-auto min-h-[500px]">
       <div className="flex justify-between items-start">
         <h3 className="text-3xl font-bold text-accent py-3">Dashbord</h3>
         <div>

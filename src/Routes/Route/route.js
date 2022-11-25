@@ -6,12 +6,14 @@ import Dashbord from "../../Components/Pages/Dashbord/Dashbord";
 import ManageUser from "../../Components/Pages/Dashbord/ManageUser/ManageUser";
 import MyBooking from "../../Components/Pages/Dashbord/MyBooking/MyBooking";
 import MyProduct from "../../Components/Pages/Dashbord/MyProduct/MyProduct";
+import Payment from "../../Components/Pages/Dashbord/Payment/Payment";
 import ErrorPage from "../../Components/Pages/ErrorPage/ErrorPage";
 import Home from "../../Components/Pages/Home/Home";
 import Login from "../../Components/Pages/Login/Login";
 import ShowProduct from "../../Components/Pages/ShowProduct/ShowProduct";
 import Signup from "../../Components/Pages/Signup/Signup";
 import CardDetails from "../../Components/Shared/CardDetails/CardDetails";
+import { AuthContex } from "../../GobalAuthProvaider/GobalAuthProvaider";
 import Main from "../../Layout/Main";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
@@ -61,6 +63,16 @@ const route = createBrowserRouter([
           {
             path: "/dashbord",
             element: <MyBooking />,
+          },
+          // {
+          //   path: "/dashbord/payment",
+          //   element: <Payment />,
+          // },
+          {
+            path: "/dashbord/payment/:id",
+            element: <Payment />,
+            loader: ({ params }) =>
+              fetch(`http://localhost:5000/payment-product/${params.id}`),
           },
           {
             path: "/dashbord/my-product",

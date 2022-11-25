@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import toast from "react-hot-toast";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import swal from "sweetalert";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 
@@ -24,6 +25,10 @@ const MyBooking = () => {
         }
       );
       const data = await res.json();
+      console.log(data);
+      if (data.massege === "unauthorized access") {
+        return [];
+      }
       return data;
     },
   });
@@ -33,38 +38,53 @@ const MyBooking = () => {
   }
 
   const cancelBookingHandelar = (id) => {
-    fetch(`http://localhost:5000/remove-booking?email=${user.email}&id=${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.massege === "unauthorized access") {
-          logOut();
-          Navigate("/login");
-          return;
-        }
-        if (data.modifiedCount > 0) {
-          toast.success("Add to Cart Successfully!");
-          refetch();
-        }
-      });
-    console.log(id);
+    swal({
+      title: "Are you sure?",
+      text: "Cancel This Booking,",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(
+          `http://localhost:5000/remove-booking?email=${user.email}&id=${id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.massege === "unauthorized access") {
+              logOut();
+              Navigate("/login");
+              return;
+            }
+            if (data.modifiedCount > 0) {
+              swal("Your Booking Cancel Successfully! ", {
+                icon: "success",
+              });
+              refetch();
+            }
+          });
+      }
+    });
   };
   console.log(bookingProducts);
   return (
     <section className="w-full">
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
-        My Booking -<strong className="text-primary"></strong>
+        My Booking -
+        <strong className="text-primary">{bookingProducts.length}</strong>
       </h3>
 
       <div className="overflow-x-auto my-10">
         <table className="table w-full">
           <thead>
-            <tr>
+            <tr className="text-center">
               <th></th>
               <th>Images</th>
               <th>Name</th>
@@ -76,7 +96,7 @@ const MyBooking = () => {
           </thead>
           <tbody>
             {bookingProducts?.map((booking, i) => (
-              <tr key={i}>
+              <tr key={i} className="text-center">
                 <th>{i + 1}</th>
                 <td>
                   <div className="avatar">
@@ -86,23 +106,31 @@ const MyBooking = () => {
                   </div>
                 </td>
                 <td>
-                  {/* <Link className="hover:text-primary">
+                  <Link
+                    to={`../../product-details/${booking._id}`}
+                    className="hover:text-primary text-2xl font-semibold"
+                  >
                     {booking?.productName}
-                  </Link> */}
+                  </Link>
                 </td>
-                <td className="text-primary font-semibold">
+                <td className="text-primary text-3xl font-bold">
                   ${booking?.sellPrice}
                 </td>
+                <td className="text-primary text-2xl font-bold">UNPAID</td>
                 <td>
-                  <button className="btn btn-sm">Advertise</button>
+                  <Link
+                    to={`../payment/${booking._id}`}
+                    className="btn mx-auto bg-green-600 text-white btn-sm"
+                  >
+                    Payment
+                  </Link>
                 </td>
-                <td className="text-primary font-bold">Unsole</td>
                 <td>
                   <button
                     onClick={() => cancelBookingHandelar(booking._id)}
                     className="btn btn-sm bg-red-600 text-white"
                   >
-                    Remove
+                    Cancel
                   </button>
                 </td>
               </tr>
