@@ -2,13 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import DisplayCard from "../DisplayCard/DisplayCard";
 import LoadingLoader from "../Loader/LoadingLoader";
 
 const DisplayProduct = ({ category }) => {
-  const { user } = useContext(AuthContex);
   const { category: name } = category;
+
   const { data: fatchResult, isLoading } = useQuery({
     queryKey: ["data", category],
     queryFn: async () => {
@@ -33,6 +32,7 @@ const DisplayProduct = ({ category }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {fatchResult.map((category) => (
             <DisplayCard
+              key={category._id}
               category={category}
               // addTocatdHandelar={addTocatdHandelar}
             />

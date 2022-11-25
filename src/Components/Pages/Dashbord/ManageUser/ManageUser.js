@@ -129,7 +129,6 @@ const ManageUser = () => {
   };
 
   const makeAdminHandelar = (id) => {
-    console.log(id);
     swal({
       title: "Are you sure?",
       text: "Set Admin Role in This User!",

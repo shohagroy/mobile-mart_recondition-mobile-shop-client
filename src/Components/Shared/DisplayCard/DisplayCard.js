@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import hotProduct from "../../../assets/hot_badg.webp";
 import lookinGood from "../../../assets/lokking_good.gif";
+import swal from "sweetalert";
 
 const DisplayCard = ({ category }) => {
-  const { user, setAddCart, addCart } = useContext(AuthContex);
+  const { user, logOut, addCart, setAddCart } = useContext(AuthContex);
+
+  const navigate = useNavigate();
 
   const addTocatdHandelar = (items) => {
     const { _id, category, images, productName, sellPrice, phone, seller } =
@@ -20,6 +23,7 @@ const DisplayCard = ({ category }) => {
       phone,
       seller,
       category,
+      userEmail: user.email,
     };
 
     fetch(`http://localhost:5000/add-carts?email=${user.email}`, {
@@ -32,22 +36,54 @@ const DisplayCard = ({ category }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.massege);
+        if (data.massege === "unauthorized access") {
+          navigate("/login");
+          return logOut();
+        }
         if (data.massege) {
           toast.error("This Product is Already Added!");
           return;
         }
         if (data.insertedId) {
-          toast.success(`${cartItems.productName} Add to Cart Successfully!`);
           setAddCart(!addCart);
+          toast.success(`${cartItems.productName} Add to Cart Successfully!`);
         }
       });
   };
+
+  const addBookNowHandelar = (id) => {
+    fetch(`http://localhost:5000/add-booking?email=${user.email}&id=${id}`, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.massege === "unauthorized access") {
+          logOut();
+          navigate("/login");
+          return;
+        }
+        if (data.modifiedCount > 0) {
+          swal({
+            title: "Successfully!",
+            text: "Your Selected Product has Booked!",
+            icon: "success",
+          });
+          navigate("../dashbord/my-booking");
+        }
+      });
+  };
+
   return (
-    <div className="card relative card-side border-2 bg-base-100 shadow-md">
+    <div
+      className={`card  card-side border-2 bg-base-100 shadow-md
+        `}
+    >
       {category.isBoosted && (
         <div
-          className={`absolute -top-20 -left-4 flex justify-between items-center `}
+          className={`absolute -top-12 -left-4 flex justify-between items-center `}
         >
           <img src={hotProduct} className="w-1/5" alt="Hot badge" />
           <img
@@ -61,7 +97,7 @@ const DisplayCard = ({ category }) => {
       <img
         className="p-3 object-cover object-fill object-contain rounded-2xl w-[290px]"
         src={category?.images}
-        alt="Movie"
+        alt={category.productName}
       />
       <figure></figure>
       <div className="card-body">
@@ -92,7 +128,7 @@ const DisplayCard = ({ category }) => {
           <p className="">
             <span
               dangerouslySetInnerHTML={{
-                __html: category.description.slice(0, 200),
+                __html: category.description.slice(0, 220),
               }}
             />
             <Link
@@ -131,7 +167,11 @@ const DisplayCard = ({ category }) => {
           >
             Add to Cart
           </button>
-          <button className="btn btn-sm btn-primary text-white">
+
+          <button
+            onClick={() => addBookNowHandelar(category._id)}
+            className="btn btn-sm btn-primary text-white"
+          >
             Book Now
           </button>
         </div>

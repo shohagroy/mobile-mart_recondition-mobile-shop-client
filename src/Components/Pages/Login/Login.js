@@ -35,7 +35,6 @@ const Login = () => {
             .then((data) => {
               if (data.jwtToken) {
                 localStorage.setItem("mobile-mart", data.jwtToken);
-                console.log(data);
                 setLoading(false);
                 navigate(path, { relative: true });
               }
@@ -83,7 +82,9 @@ const Login = () => {
               </label>
             </div>
             <div>
-              <p className="text-center font-bold text-red-600">{authError}</p>
+              <p className="text-center capitalize font-bold text-red-600">
+                {authError}
+              </p>
             </div>
             <div className="mt-4">
               <button

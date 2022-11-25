@@ -171,7 +171,6 @@ const AddProduct = () => {
                   {category.category}
                 </option>
               ))}
-              <option value="iPhone">iPhone</option>
 
               <option value="addNew">
                 <button onClick={"click"}>+Add new</button>

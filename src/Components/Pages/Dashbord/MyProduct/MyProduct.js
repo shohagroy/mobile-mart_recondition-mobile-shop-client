@@ -103,7 +103,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/remove-advertise?email=${user.email}&id=${addItem._id}`,
+          `http://localhost:5000/-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {

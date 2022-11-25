@@ -19,7 +19,6 @@ const Home = () => {
   if (isLoading) {
     return <LoadingLoader />;
   }
-  console.log(products);
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -29,7 +28,7 @@ const Home = () => {
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-primary">Latest Product</h2>
             <Link to={`/product`}>
-              <button className="btn btn-sm btn-outline btn-primary hover:text-white">
+              <button className="btn z-50 btn-sm btn-outline btn-primary hover:text-white">
                 View More
               </button>
             </Link>

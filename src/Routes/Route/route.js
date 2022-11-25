@@ -55,6 +55,14 @@ const route = createBrowserRouter([
         ),
         children: [
           {
+            path: "/dashbord/my-booking",
+            element: <MyBooking />,
+          },
+          {
+            path: "/dashbord",
+            element: <MyBooking />,
+          },
+          {
             path: "/dashbord/my-product",
             element: (
               <SellerRoute>
@@ -62,18 +70,7 @@ const route = createBrowserRouter([
               </SellerRoute>
             ),
           },
-          {
-            path: "/dashbord/my-booking",
-            element: <MyBooking />,
-          },
-          {
-            path: "/dashbord",
-            element: (
-              <SellerRoute>
-                <MyProduct />
-              </SellerRoute>
-            ),
-          },
+
           {
             path: "/dashbord/add-product",
             element: (

@@ -9,8 +9,6 @@ const Dashbord = () => {
   const [isAdmin] = useAdmin(user?.email);
   const [isSeller] = UseSeller(user?.email);
 
-  console.log(isAdmin);
-
   return (
     <section className="max-w-7xl mx-auto min-h-[500px]">
       <div className="flex justify-between items-start">

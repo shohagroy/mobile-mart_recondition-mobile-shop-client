@@ -1,5 +1,4 @@
 import React from "react";
-import ReactQuill from "react-quill";
 import { useLoaderData } from "react-router-dom";
 
 const CardDetails = () => {
@@ -22,7 +21,6 @@ const CardDetails = () => {
     sellerEmail,
   } = product;
 
-  console.log(product);
   return (
     <section className="max-w-7xl mx-auto">
       <div className="mt-10">
@@ -31,8 +29,15 @@ const CardDetails = () => {
         </div>
         <div className="m-10">
           <div className="card lg:card-side bg-base-100 shadow-xl">
-            <img className="w-1/3" src={images} alt={productName} />
-            <figure></figure>
+            <div>
+              <figure>
+                <img
+                  className="lg:mx-28 lg:mt-10 object-cover"
+                  src={images}
+                  alt={productName}
+                />
+              </figure>
+            </div>
             <div className="card-body">
               <h2 className="font-bold text-3xl text-primary">{productName}</h2>
               <div className="font-semibold">

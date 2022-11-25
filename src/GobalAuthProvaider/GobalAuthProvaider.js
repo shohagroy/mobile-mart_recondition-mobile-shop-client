@@ -56,7 +56,7 @@ const GobalAuthProvaider = ({ children }) => {
     });
 
     return () => unSubscribe();
-  }, []);
+  }, [user]);
 
   const authInfo = {
     setAddCart,
