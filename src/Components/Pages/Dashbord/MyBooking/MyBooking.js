@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
-import toast from "react-hot-toast";
 import { Link, Navigate } from "react-router-dom";
 import swal from "sweetalert";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
+import paidImg from "../../../../assets/paid-5025785_1280.webp";
 
 const MyBooking = () => {
   const { user, logOut } = useContext(AuthContex);
@@ -33,6 +33,7 @@ const MyBooking = () => {
     },
   });
 
+  console.log(bookingProducts);
   if (isLoading) {
     return <LoadingLoader />;
   }
@@ -73,6 +74,7 @@ const MyBooking = () => {
       }
     });
   };
+
   console.log(bookingProducts);
   return (
     <section className="w-full">
@@ -90,13 +92,13 @@ const MyBooking = () => {
               <th>Name</th>
               <th>Price</th>
               <th>Status</th>
-              <th>Paymeny</th>
+              <th>Payment</th>
               <th>Cancel</th>
             </tr>
           </thead>
           <tbody>
             {bookingProducts?.map((booking, i) => (
-              <tr key={i} className="text-center">
+              <tr key={i} className="text-center relative">
                 <th>{i + 1}</th>
                 <td>
                   <div className="avatar">
@@ -113,26 +115,49 @@ const MyBooking = () => {
                     {booking?.productName}
                   </Link>
                 </td>
-                <td className="text-primary text-3xl font-bold">
-                  ${booking?.sellPrice}
-                </td>
-                <td className="text-primary text-2xl font-bold">UNPAID</td>
+                <td>${booking?.sellPrice}</td>
                 <td>
-                  <Link
-                    to={`../payment/${booking._id}`}
-                    className="btn mx-auto bg-green-600 text-white btn-sm"
-                  >
-                    Payment
-                  </Link>
+                  {booking.paymentStatus ? (
+                    <p className="text-green-600 text-2xl font-bold">
+                      {booking.paymentStatus}
+                    </p>
+                  ) : (
+                    <p className="text-primary text-3xl font-bold">UNPAID</p>
+                  )}
                 </td>
                 <td>
-                  <button
-                    onClick={() => cancelBookingHandelar(booking._id)}
-                    className="btn btn-sm bg-red-600 text-white"
-                  >
-                    Cancel
-                  </button>
+                  {booking.paymentStatus ? (
+                    <p>{booking?.transactionId}</p>
+                  ) : (
+                    <Link
+                      to={`../payment/${booking._id}`}
+                      className="btn mx-auto bg-green-600 text-white btn-sm"
+                    >
+                      Payment
+                    </Link>
+                  )}
                 </td>
+                <td>
+                  {booking.paymentStatus ? (
+                    <p className="text-primary capitalize font-semibold">
+                      delivary Panding
+                    </p>
+                  ) : (
+                    <button
+                      onClick={() => cancelBookingHandelar(booking._id)}
+                      className="btn btn-sm bg-red-600 text-white"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </td>
+                {booking.paymentStatus && (
+                  <img
+                    src={paidImg}
+                    className="w-[70px] absolute top-[0] left-[40px]"
+                    alt="Paid Image"
+                  />
+                )}
               </tr>
             ))}
           </tbody>

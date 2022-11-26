@@ -3,6 +3,7 @@ import React from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import DisplayCard from "../../Shared/DisplayCard/DisplayCard";
 import LoadingLoader from "../../Shared/Loader/LoadingLoader";
+import Banar from "./Banar/Banar";
 
 const Home = () => {
   const boostedProduct = useLoaderData();
@@ -15,15 +16,16 @@ const Home = () => {
     },
   });
 
-  console.log(boostedProduct);
   if (isLoading) {
     return <LoadingLoader />;
   }
 
   return (
-    <section className="max-w-7xl mx-auto">
-      <div className="w-full md:h-[200px] bg-red-300"> banr</div>
-      <div className="my-12">
+    <section className="max-w-7xl mx-auto min-h-[90vh]">
+      <div className="w-full  bg-red-300">
+        <Banar />
+      </div>
+      <div className="my-12 ">
         <div className="p-6 rounded-md my-10  bg-gray-200">
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-primary">Latest Product</h2>
