@@ -4,30 +4,32 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 
-const ChekoutFrom = ({ booking }) => {
+const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
   const { user } = useContext(AuthContex);
-  const { price, patientName, email, _id } = booking;
+  const { sellPrice, productName, images, sellerEmail, _id } = bookingProduct;
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
 
-  const [clientSecret, setClientSecret] = useState("");
+  const [customerSecret, setCustomerSecret] = useState("");
   const [cardError, setCardError] = useState("");
+
+  console.log(customerPhone, customerAddress);
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch(`http://localhost:5000/create-payment-intent`, {
+    fetch(`http://localhost:5000/create-payment-intent?email=${user.email}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
       },
-      body: JSON.stringify(booking),
+      body: JSON.stringify(bookingProduct),
     })
       .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, [booking]);
+      .then((data) => setCustomerSecret(data.clientSecret));
+  }, [bookingProduct]);
 
   const handleSubmit = async (event) => {
     setCardError("");
@@ -55,12 +57,12 @@ const ChekoutFrom = ({ booking }) => {
     }
 
     const { paymentIntent, error: confirmError } =
-      await stripe.confirmCardPayment(clientSecret, {
+      await stripe.confirmCardPayment(customerSecret, {
         payment_method: {
           card: card,
           billing_details: {
-            name: patientName,
-            email: email,
+            name: productName,
+            email: sellerEmail,
           },
         },
       });
@@ -71,24 +73,28 @@ const ChekoutFrom = ({ booking }) => {
     }
 
     if (paymentIntent.status === "succeeded") {
-      const payment = {
-        patientName,
-        price,
-        email,
+      const paymentProducts = {
+        productName,
+        sellPrice,
+        sellerEmail,
+        images,
         transactionId: paymentIntent.id,
         bookingId: _id,
+        customerAddress,
+        customerPhone,
       };
 
       fetch(`http://localhost:5000/payments?email=${user.email}`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          authorization: `bearer ${localStorage.getItem("token")}`,
+          authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
         },
-        body: JSON.stringify(payment),
+        body: JSON.stringify(paymentProducts),
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.insertedId) {
             setLoading(false);
             swal({
@@ -97,7 +103,7 @@ const ChekoutFrom = ({ booking }) => {
               icon: "success",
               button: "Ok!",
             });
-            navigate("../transactions");
+            // navigate("../transactions");
           }
         });
     }
@@ -131,7 +137,7 @@ const ChekoutFrom = ({ booking }) => {
         type="submit"
         disabled={!stripe}
       >
-        {loading ? "Loading..." : `Pay $${price}`}
+        {loading ? "Loading..." : `Pay $${sellPrice}`}
       </button>
       <p className="text-center mt-6 text-red-600 font-bold">{cardError}</p>
     </form>
