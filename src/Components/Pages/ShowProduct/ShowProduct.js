@@ -17,8 +17,6 @@ const ShowProduct = () => {
     return <LoadingLoader />;
   }
 
-  console.log(products);
-
   return (
     <section className="max-w-7xl mx-auto">
       <div className="h-[400px] bg-red-300">banar</div>
@@ -27,7 +25,7 @@ const ShowProduct = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-4 p-4">
           {products.map((category) => (
-            <div key={category._id} className="card w-96 bg-base-100 shadow-xl">
+            <div key={category._id} className="  bg-base-100 shadow-xl">
               <div className="card-body bg-primary text-white rounded-xl text-center">
                 <h2 className="text-2xl font-bold">{category.category}</h2>
               </div>

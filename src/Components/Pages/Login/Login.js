@@ -24,7 +24,7 @@ const Login = () => {
         const userEmail = { email: user.email };
 
         if (userEmail) {
-          fetch(`http://localhost:5000/jwt`, {
+          fetch(`http://localhost:5000/jwtLogin`, {
             method: "POST",
             headers: {
               "content-type": "application/json",

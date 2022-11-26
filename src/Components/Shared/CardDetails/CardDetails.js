@@ -1,9 +1,13 @@
-import React from "react";
-import { useLoaderData } from "react-router-dom";
+import React, { useContext } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const CardDetails = () => {
+  const { user, logOut } = useContext(AuthContex);
   const product = useLoaderData();
 
+  const navigate = useNavigate();
   const {
     _id,
     category,
@@ -20,6 +24,31 @@ const CardDetails = () => {
     seller,
     sellerEmail,
   } = product;
+
+  const addBookNowHandelar = (id) => {
+    fetch(`http://localhost:5000/add-booking?email=${user.email}&id=${id}`, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.massege === "unauthorized access") {
+          logOut();
+          navigate("/login");
+          return;
+        }
+        if (data.modifiedCount > 0) {
+          swal({
+            title: "Successfully!",
+            text: "Your Selected Product has Booked!",
+            icon: "success",
+          });
+          navigate("../dashbord/my-booking");
+        }
+      });
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -114,7 +143,10 @@ const CardDetails = () => {
                 <div dangerouslySetInnerHTML={{ __html: description }} />
               </div>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary text-white font-bold">
+                <button
+                  onClick={() => addBookNowHandelar(_id)}
+                  className="btn btn-primary text-white font-bold"
+                >
                   Book Now
                 </button>
               </div>

@@ -13,7 +13,6 @@ import Login from "../../Components/Pages/Login/Login";
 import ShowProduct from "../../Components/Pages/ShowProduct/ShowProduct";
 import Signup from "../../Components/Pages/Signup/Signup";
 import CardDetails from "../../Components/Shared/CardDetails/CardDetails";
-import { AuthContex } from "../../GobalAuthProvaider/GobalAuthProvaider";
 import Main from "../../Layout/Main";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";

@@ -61,8 +61,8 @@ const AddProduct = () => {
       .then((imgData) => {
         if (imgData.success) {
           const productInfo = {
-            seller: user.displayName,
-            sellerEmail: user.email,
+            seller: data.sellerName,
+            sellerEmail: data.sellerEmail,
             productName: data.productName,
             category: data.category,
             condition: data.condition,
@@ -74,6 +74,8 @@ const AddProduct = () => {
             images: imgData.data.url,
             description: value,
             postDate: new Date().toLocaleDateString(),
+            postDay: new Date(),
+            isBooked: false,
           };
 
           fetch(`http://localhost:5000/products?email=${user.email}`, {
@@ -245,6 +247,41 @@ const AddProduct = () => {
               <p className="text-red-600"> {errors.purchaseDate?.message} </p>
             )}
           </div>
+
+          <div className="form-control my-2 w-full ">
+            <input
+              required
+              value={user?.displayName}
+              {...register("sellerName", {
+                required: "Please Enter Product Purchase Date!",
+              })}
+              className={`input input-bordered border-2 w-full ${
+                errors.sellerName && "border-red-600"
+              }`}
+              type="text"
+            />
+            {errors.sellerName && (
+              <p className="text-red-600"> {errors.sellerName?.message} </p>
+            )}
+          </div>
+
+          <div className="form-control my-2 w-full ">
+            <input
+              value={user?.email}
+              required
+              {...register("sellerEmail", {
+                required: "Please Enter Product Purchase Date!",
+              })}
+              className={`input input-bordered border-2 w-full ${
+                errors.sellerEmail && "border-red-600"
+              }`}
+              type="text"
+            />
+            {errors.sellerEmail && (
+              <p className="text-red-600"> {errors.sellerEmail?.message} </p>
+            )}
+          </div>
+
           <div className="form-control my-2 w-full ">
             <input
               {...register("location", {

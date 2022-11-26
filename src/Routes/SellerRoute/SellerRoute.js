@@ -9,8 +9,6 @@ const SellerRoute = ({ children }) => {
   const [isAdmin, adminloading] = useAdmin(user.email);
   const [isSeller, sellerLoading] = UseSeller(user.email);
 
-  console.log(user);
-
   if (adminloading || sellerLoading) {
     return <LoadingLoader />;
   }

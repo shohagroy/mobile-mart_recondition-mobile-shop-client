@@ -58,48 +58,54 @@ const Navigation = () => {
       <div className="navbar bg-base-100">
         <div className="navbar bg-base-100">
           <div className="flex-1">
-            <div className="hidden md:block">
+            <div className="">
               <div>
                 <Link to="/">
-                  <img className="  md:w-[150px]" src={logo} alt="Logo" />
+                  <img
+                    className="  w-[100px] md:w-[150px]"
+                    src={logo}
+                    alt="Logo"
+                  />
                 </Link>
               </div>
             </div>
           </div>
           <div className="flex-none">
-            <Link to="/">
-              <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                Home
-              </button>
-            </Link>
-
-            <Link to="/product">
-              <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                Product
-              </button>
-            </Link>
-
-            {user.email ? (
-              <>
-                <Link to="/dashbord">
-                  <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                    Dashbord
-                  </button>
-                </Link>
-                <button
-                  onClick={logOut}
-                  className="text-xl mx-2 text-accent hover:text-primary font-semibold "
-                >
-                  Log Out
-                </button>
-              </>
-            ) : (
-              <Link to="/login">
+            <div className="hidden md:block">
+              <Link to="/">
                 <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                  Login
+                  Home
                 </button>
               </Link>
-            )}
+
+              <Link to="/product">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Product
+                </button>
+              </Link>
+
+              {user.email ? (
+                <>
+                  <Link to="/dashbord">
+                    <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                      Dashbord
+                    </button>
+                  </Link>
+                  <button
+                    onClick={logOut}
+                    className="text-xl mx-2 text-accent hover:text-primary font-semibold "
+                  >
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login">
+                  <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                    Login
+                  </button>
+                </Link>
+              )}
+            </div>
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
                 <div className="indicator">

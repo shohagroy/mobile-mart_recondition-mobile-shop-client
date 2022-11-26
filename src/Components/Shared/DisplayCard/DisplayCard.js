@@ -76,9 +76,11 @@ const DisplayCard = ({ category }) => {
       });
   };
 
+  const newDate = new Date();
+
   return (
     <div
-      className={`card  card-side border-2 bg-base-100 shadow-md
+      className={`card  md:card-side border-2 bg-base-100 shadow-md
         `}
     >
       {category.isBoosted && (
@@ -88,21 +90,21 @@ const DisplayCard = ({ category }) => {
           <img src={hotProduct} className="w-1/5" alt="Hot badge" />
           <img
             src={lookinGood}
-            className="w-1/6 mt-14 -mr-8 border rounded-full bg-primary"
+            className="w-1/6 z-50 mt-14 -mr-8 border rounded-full bg-primary"
             alt="Hot badge"
           />
         </div>
       )}
 
       <img
-        className="p-3 object-cover object-fill object-contain rounded-2xl w-[290px]"
+        className="p-3 object-cover object-fill rounded-2xl md:w-[290px]"
         src={category?.images}
         alt={category.productName}
       />
       <figure></figure>
       <div className="card-body">
         <h2 className="card-title">{category.productName}</h2>
-        <div>
+        <div className="mb-6">
           <p>
             Category:{" "}
             <span className="font-bold text-primary">{category.category}</span>
@@ -158,9 +160,9 @@ const DisplayCard = ({ category }) => {
             </span>
             <p>{category.phone}</p>
           </div>
-          <p>{category.postDate}</p>
+          <p>Post on: {category.postDate}</p>
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions right-0 m-4 absolute bottom-0">
           <button
             onClick={() => addTocatdHandelar(category)}
             className="btn btn-sm btn-outline btn-primary text-white"
