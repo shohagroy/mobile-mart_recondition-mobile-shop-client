@@ -17,7 +17,7 @@ const Navigation = () => {
     queryKey: ["data", user, addCart],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/add-carts?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -25,7 +25,6 @@ const Navigation = () => {
         }
       );
       const data = await res.json();
-      console.log(data);
       if (data.massege === "unauthorized access") {
         return [];
       }
@@ -38,12 +37,15 @@ const Navigation = () => {
   }
 
   const cartRemoveHandelar = (id) => {
-    fetch(`http://localhost:5000/add-carts?email=${user.email}&id=${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}&id=${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount > 0) {
@@ -166,7 +168,7 @@ const Navigation = () => {
                                     <p className="text-xl font-bold">
                                       Price:{" "}
                                       <span className="text-primary">
-                                        {item.sellPrice} TK
+                                        ${item.sellPrice}
                                       </span>
                                     </p>
                                     <div className="flex justify-start items-center">
@@ -227,16 +229,65 @@ const Navigation = () => {
             </div>
             <div className={`dropdown dropdown-end  md:hidden`}>
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img src="https://placeimg.com/80/80/people" />
+                <div>
+                  <span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="#EC1C24"
+                      className="w-8 h-8"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+                      />
+                    </svg>
+                  </span>
                 </div>
               </label>
               <ul
                 tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 text-primary font-semibold rounded-box w-52"
               >
                 <li>
-                  <a>Logout</a>
+                  <Link to="/">
+                    <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                      Home
+                    </button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/product">
+                    <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                      Product
+                    </button>
+                  </Link>
+                </li>
+                <li>
+                  {user.email ? (
+                    <>
+                      <Link to="/dashbord">
+                        <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                          Dashbord
+                        </button>
+                      </Link>
+                      <button
+                        onClick={logOut}
+                        className="text-xl mx-2 text-accent hover:text-primary font-semibold "
+                      >
+                        Log Out
+                      </button>
+                    </>
+                  ) : (
+                    <Link to="/login">
+                      <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                        Login
+                      </button>
+                    </Link>
+                  )}
                 </li>
               </ul>
             </div>
@@ -248,3 +299,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+<div className="hidden md:block"></div>;

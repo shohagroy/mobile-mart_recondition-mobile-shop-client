@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import { useQuery } from "@tanstack/react-query";
-import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import { Link } from "react-router-dom";
 import swal from "sweetalert";
+import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
+import { Helmet } from "react-helmet";
 
 const AllProduct = () => {
   const { user } = useContext(AuthContex);
@@ -16,7 +17,7 @@ const AllProduct = () => {
     queryKey: ["allProducts", "removeProductHandelar", user],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/all-products?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/all-products?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -29,7 +30,7 @@ const AllProduct = () => {
   });
 
   if (isLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
   const removeProductHandelar = (id) => {
@@ -41,12 +42,15 @@ const AllProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}&id=${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount > 0) {
@@ -62,8 +66,13 @@ const AllProduct = () => {
     });
   };
 
+  console.log(allProducts);
+
   return (
     <section className="w-full">
+      <Helmet>
+        <title>Show All Product - Mobile Mart</title>
+      </Helmet>
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
         All Product -
         <strong className="text-primary">{allProducts?.length}</strong>
@@ -89,10 +98,7 @@ const AllProduct = () => {
                 <td>
                   <div className="avatar">
                     <div className="w-28 mask rounded">
-                      <img
-                        src="https://placeimg.com/192/192/people"
-                        alt={product?.productName}
-                      />
+                      <img src={product.images} alt={product?.productName} />
                     </div>
                   </div>
                 </td>
@@ -105,7 +111,13 @@ const AllProduct = () => {
                   ${product?.sellPrice}
                 </td>
                 <td>{product?.postDate}</td>
-                <td className="text-primary font-bold">Unsole</td>
+                <td className="text-primary font-bold">
+                  {product.paymentStatus === "PAID" ? (
+                    <span className="text-green-600">SOLE</span>
+                  ) : (
+                    <span>UNSOLE</span>
+                  )}
+                </td>
                 <td>
                   <button
                     onClick={() => removeProductHandelar(product._id)}

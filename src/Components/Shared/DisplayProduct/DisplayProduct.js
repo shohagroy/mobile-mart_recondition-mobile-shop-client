@@ -5,14 +5,16 @@ import { Link } from "react-router-dom";
 import DisplayCard from "../DisplayCard/DisplayCard";
 import LoadingLoader from "../Loader/LoadingLoader";
 
-const DisplayProduct = ({ category }) => {
-  const { category: name } = category;
+const DisplayProduct = ({ name, categoryName }) => {
+  // const { category: name } = categoryName;
+
+  console.log(name);
 
   const { data: fatchResult, isLoading } = useQuery({
-    queryKey: ["data", category],
+    queryKey: ["data", name],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/all-product?categorys=${name}`
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/all-product?categorys=${name}`
       );
       const data = res.json();
       return data;

@@ -26,12 +26,15 @@ const CardDetails = () => {
   } = product;
 
   const addBookNowHandelar = (id) => {
-    fetch(`http://localhost:5000/add-booking?email=${user.email}&id=${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-booking?email=${user.email}&id=${id}`,
+      {
+        method: "PUT",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {

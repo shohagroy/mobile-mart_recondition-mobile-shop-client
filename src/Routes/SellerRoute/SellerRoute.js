@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import DashbordLoader from "../../Components/Shared/DashbordLoader/DashbordLoader";
 import LoadingLoader from "../../Components/Shared/Loader/LoadingLoader";
 import useAdmin from "../../Components/Shared/UseAdmin/useAdmin";
 import UseSeller from "../../Components/Shared/UseSeller/UseSeller";
@@ -10,7 +11,7 @@ const SellerRoute = ({ children }) => {
   const [isSeller, sellerLoading] = UseSeller(user.email);
 
   if (adminloading || sellerLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
   if (isAdmin || isSeller) {

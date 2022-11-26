@@ -5,13 +5,18 @@ import DisplayCard from "../../Shared/DisplayCard/DisplayCard";
 import LoadingLoader from "../../Shared/Loader/LoadingLoader";
 import Banar from "./Banar/Banar";
 import redx from "../../../assets/redx.png";
+import { Helmet } from "react-helmet";
+import image1 from "../../../assets/img_1.png";
+import register from "../../../assets/register-now_3.gif";
 
 const Home = () => {
   const boostedProduct = useLoaderData();
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/display-products");
+      const res = await fetch(
+        "https://mobile-mart-recondition-mobile-shop-server.vercel.app/display-products"
+      );
       const data = await res.json();
       return data;
     },
@@ -21,9 +26,11 @@ const Home = () => {
     return <LoadingLoader />;
   }
 
-  console.log(boostedProduct);
   return (
     <section className="max-w-7xl mx-auto min-h-[90vh]">
+      <Helmet>
+        <title>Well Cone to Mobile Mart</title>
+      </Helmet>
       <div className="w-full  ">
         <Banar />
       </div>
@@ -36,9 +43,6 @@ const Home = () => {
                 src={redx}
                 alt="redx logo"
               />
-              {/* <h3 className="text-4xl ml-4 font-bold">
-                RED<span className="text-primary">X</span>-
-              </h3> */}
               <p className="lg:text-3xl md:text-2xl capitalize font-semibold">
                 <span className="hidden md:block">
                   - Get safe and secure delivery of any product through this.
@@ -89,6 +93,32 @@ const Home = () => {
           </div>
         </div>
 
+        <div>
+          <div className="h-[200px] w-full flex justify-between items-center border border-primary border-2 rounded-lg p-8">
+            <div>
+              <img
+                className="w-[220px] object-cover"
+                src={image1}
+                alt="Sell Mobile"
+              />
+            </div>
+            <div className="text-center">
+              <h2 className="text-primary font-bold text-4xl capitalize">
+                Start making money!
+              </h2>
+              <p className="font-semibold text-2xl capitalize">
+                Do you have Mobile Phone to sell? Post your first ad and earn
+                money!
+              </p>
+            </div>
+            <div>
+              <Link to="signUp">
+                <img className="w-[180px]" src={register} alt="register now " />
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className="p-6 rounded-md my-10  bg-gray-5 0">
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-primary">
@@ -107,13 +137,35 @@ const Home = () => {
                 <DisplayCard key={product._id} category={product} />
               ))}
             </div>
+            <div className="w-full mt-6 text-right">
+              <Link to={`/product`}>
+                <button className="btn btn-md  btn-primary text-white">
+                  View More
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className="w-full text-right">
-            <Link to={`/product`}>
-              <button className="btn btn-md  btn-primary text-white">
-                View More
-              </button>
-            </Link>
+
+          <div className="w-full bg-primary/80 mt-20">
+            <div className="container flex flex-col flex-wrap content-center justify-center p-4 py-20 mx-auto md:p-10">
+              <h1 className="text-5xl antialiased font-bold leading-none text-center text-gray-100">
+                Get Our Updates
+              </h1>
+
+              <div className="flex pt-8 flex-row">
+                <input
+                  type="text"
+                  placeholder="example@email.com"
+                  className="w-3/5 p-3 rounded-l-lg sm:w-2/3"
+                />
+                <button
+                  type="button"
+                  className="w-2/5 p-3 font-semibold rounded-r-lg sm:w-1/3 bg-green-500  text-white"
+                >
+                  Subscribe
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

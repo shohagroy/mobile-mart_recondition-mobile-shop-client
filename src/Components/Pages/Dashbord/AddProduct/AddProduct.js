@@ -7,6 +7,8 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
+import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
+import { Helmet } from "react-helmet";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContex);
@@ -29,7 +31,7 @@ const AddProduct = () => {
     queryKey: ["categoris"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/categorys?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -42,7 +44,7 @@ const AddProduct = () => {
   });
 
   if (isLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
   const addProductHandelar = (data) => {
@@ -78,14 +80,17 @@ const AddProduct = () => {
             isBooked: false,
           };
 
-          fetch(`http://localhost:5000/products?email=${user.email}`, {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-            body: JSON.stringify(productInfo),
-          })
+          fetch(
+            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+              },
+              body: JSON.stringify(productInfo),
+            }
+          )
             .then((res) => res.json())
             .then((data) => {
               if (data.insertedId) {
@@ -107,14 +112,17 @@ const AddProduct = () => {
 
     const category = event.target.category.value;
 
-    fetch(`http://localhost:5000/categorys?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify({ category }),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify({ category }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
@@ -132,13 +140,16 @@ const AddProduct = () => {
 
   return (
     <section className="w-full">
+      <Helmet>
+        <title>Add a New Product - Mobile Mart</title>
+      </Helmet>
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
         Add Products
       </h3>
       <div className="w-full flex justify-center relative items-center">
         <form
           onSubmit={handleSubmit(addProductHandelar)}
-          className="md:w-[800px] p-4  border mx-2 my-10 border-black rounded-lg"
+          className="md:w-[800px] w-full p-4  border mx-2 my-5 md:my-10 border-black rounded-lg"
         >
           <div className="form-control  w-full ">
             <input

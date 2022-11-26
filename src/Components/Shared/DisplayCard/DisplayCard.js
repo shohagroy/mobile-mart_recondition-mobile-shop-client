@@ -26,14 +26,17 @@ const DisplayCard = ({ category }) => {
       userEmail: user.email,
     };
 
-    fetch(`http://localhost:5000/add-carts?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify(cartItems),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(cartItems),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {
@@ -52,12 +55,15 @@ const DisplayCard = ({ category }) => {
   };
 
   const addBookNowHandelar = (id) => {
-    fetch(`http://localhost:5000/add-booking?email=${user.email}&id=${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-booking?email=${user.email}&id=${id}`,
+      {
+        method: "PUT",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {
@@ -75,8 +81,6 @@ const DisplayCard = ({ category }) => {
         }
       });
   };
-
-  const newDate = new Date();
 
   return (
     <div
@@ -119,7 +123,7 @@ const DisplayCard = ({ category }) => {
           <p>
             Price:{" "}
             <span className="font-bold text-primary">
-              {category.sellPrice} TK
+              ${category.sellPrice}
             </span>
           </p>
           <p>
@@ -140,8 +144,28 @@ const DisplayCard = ({ category }) => {
               Read More...
             </Link>
           </p>
-          <div className="flex justify-start items-center">
+          <div className="flex justify-start relative items-center">
             <h3 className="font-semibold mr-4">{category.seller} </h3>
+            <span
+              className={`badge-md bg-none  -top-2 -left-6 ${
+                category.verifyUser ? "absolute" : "hidden"
+              }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="#01A3F6"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
+                />
+              </svg>
+            </span>
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

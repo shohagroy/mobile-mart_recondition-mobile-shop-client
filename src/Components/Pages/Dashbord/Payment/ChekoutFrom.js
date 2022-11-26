@@ -15,18 +15,19 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
   const [customerSecret, setCustomerSecret] = useState("");
   const [cardError, setCardError] = useState("");
 
-  console.log(customerPhone, customerAddress);
-
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch(`http://localhost:5000/create-payment-intent?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify(bookingProduct),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/create-payment-intent?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(bookingProduct),
+      }
+    )
       .then((res) => res.json())
       .then((data) => setCustomerSecret(data.clientSecret));
   }, [bookingProduct]);
@@ -84,17 +85,19 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
         customerPhone,
       };
 
-      fetch(`http://localhost:5000/payments?email=${user.email}`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-        body: JSON.stringify(paymentProducts),
-      })
+      fetch(
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/payments?email=${user.email}`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+          body: JSON.stringify(paymentProducts),
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.insertedId) {
             setLoading(false);
             swal({
@@ -103,7 +106,7 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
               icon: "success",
               button: "Ok!",
             });
-            // navigate("../transactions");
+            navigate("../../dashbord");
           }
         });
     }

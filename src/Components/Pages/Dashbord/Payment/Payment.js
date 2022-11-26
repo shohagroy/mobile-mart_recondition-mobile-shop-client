@@ -1,10 +1,10 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import ChekoutFrom from "./ChekoutFrom";
+import { Helmet } from "react-helmet";
 
 const stripePromise = loadStripe(process.env.REACT_APP_strip_pk);
 
@@ -14,19 +14,14 @@ const Payment = () => {
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
 
-  const {
-    _id,
-    category,
-    images,
-    location,
-    phone,
-    productName,
-    sellPrice,
-    seller,
-  } = bookingProduct;
+  const { category, location, phone, productName, sellPrice, seller } =
+    bookingProduct;
 
   return (
     <div className="w-full">
+      <Helmet>
+        <title>Payment - Mobile Mart</title>
+      </Helmet>
       {/*  */}
       <div className="mx-10 font-semibold">
         <h3 className="text-2xl">
@@ -121,9 +116,6 @@ const Payment = () => {
               disabled
               value={phone}
             />
-            <button className="btn btn-primary" type="submit">
-              submit
-            </button>
           </form>
 
           <div className="card-actions justify-center">

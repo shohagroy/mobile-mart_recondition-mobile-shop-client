@@ -27,7 +27,10 @@ const route = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () => fetch("http://localhost:5000/add-advertise"),
+        loader: () =>
+          fetch(
+            "https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-advertise"
+          ),
       },
       {
         path: "/login",
@@ -40,12 +43,15 @@ const route = createBrowserRouter([
       {
         path: "/product",
         element: <ShowProduct />,
+        children: [{ path: "product", element: <AllProduct /> }],
       },
       {
         path: "/product-details/:id",
         element: <CardDetails />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/products-details/${params.id}`),
+          fetch(
+            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products-details/${params.id}`
+          ),
       },
       {
         path: "/dashbord",
@@ -71,7 +77,9 @@ const route = createBrowserRouter([
             path: "/dashbord/payment/:id",
             element: <Payment />,
             loader: ({ params }) =>
-              fetch(`http://localhost:5000/payment-product/${params.id}`),
+              fetch(
+                `https://mobile-mart-recondition-mobile-shop-server.vercel.app/payment-product/${params.id}`
+              ),
           },
           {
             path: "/dashbord/my-product",

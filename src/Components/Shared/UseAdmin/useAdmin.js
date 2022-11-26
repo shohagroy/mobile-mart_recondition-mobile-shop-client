@@ -5,11 +5,14 @@ const useAdmin = (email) => {
   const [adminloading, setadminLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/chekAdmin/${email}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/chekAdmin/${email}`,
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (!data.isAdmin) {

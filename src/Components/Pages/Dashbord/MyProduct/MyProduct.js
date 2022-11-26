@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import { Link } from "react-router-dom";
 import swal from "sweetalert";
+import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
 
 const MyProduct = () => {
   const { user } = useContext(AuthContex);
@@ -16,7 +17,7 @@ const MyProduct = () => {
     queryKey: ["products", "removeProductHandelar", user],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/products?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -29,7 +30,7 @@ const MyProduct = () => {
   });
 
   if (isLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
   const removeProductHandelar = (id) => {
@@ -41,12 +42,15 @@ const MyProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}&id=${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
@@ -72,7 +76,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/add-advertise?email=${user.email}&id=${addItem._id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {
@@ -103,7 +107,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/-advertise?email=${user.email}&id=${addItem._id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {

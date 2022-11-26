@@ -3,8 +3,9 @@ import React, { useContext } from "react";
 import { Link, Navigate } from "react-router-dom";
 import swal from "sweetalert";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
-import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import paidImg from "../../../../assets/paid-5025785_1280.webp";
+import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
+import { Helmet } from "react-helmet";
 
 const MyBooking = () => {
   const { user, logOut } = useContext(AuthContex);
@@ -17,7 +18,7 @@ const MyBooking = () => {
     queryKey: ["bookingProducts"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/booking-product?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/booking-product?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -25,7 +26,6 @@ const MyBooking = () => {
         }
       );
       const data = await res.json();
-      console.log(data);
       if (data.massege === "unauthorized access") {
         return [];
       }
@@ -33,9 +33,8 @@ const MyBooking = () => {
     },
   });
 
-  console.log(bookingProducts);
   if (isLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
   const cancelBookingHandelar = (id) => {
@@ -48,7 +47,7 @@ const MyBooking = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/remove-booking?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-booking?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {
@@ -58,7 +57,6 @@ const MyBooking = () => {
         )
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.massege === "unauthorized access") {
               logOut();
               Navigate("/login");
@@ -75,9 +73,11 @@ const MyBooking = () => {
     });
   };
 
-  console.log(bookingProducts);
   return (
     <section className="w-full">
+      <Helmet>
+        <title>Booked Product - Mobile Mart</title>
+      </Helmet>
       <h3 className="text-2xl text-center  md:text-left mx-4  font-semibold text-accent">
         My Booking -
         <strong className="text-primary">{bookingProducts.length}</strong>

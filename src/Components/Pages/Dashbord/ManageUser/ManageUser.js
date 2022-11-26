@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import { useQuery } from "@tanstack/react-query";
-import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import swal from "sweetalert";
 import { Link } from "react-router-dom";
+import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
+import { Helmet } from "react-helmet";
 
 const ManageUser = () => {
   const { user } = useContext(AuthContex);
@@ -17,7 +18,7 @@ const ManageUser = () => {
     queryKey: ["users", "removeUserHandelar", user, role],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/users?email=${user.email}&role=${role}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&role=${role}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -30,10 +31,10 @@ const ManageUser = () => {
   });
 
   if (isLoading) {
-    return <LoadingLoader />;
+    return <DashbordLoader />;
   }
 
-  const userVeifyHandelar = (id) => {
+  const userVeifyHandelar = (id, userEmail) => {
     swal({
       title: "Are you sure?",
       text: "Verifyed This User!",
@@ -43,7 +44,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users-verify?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-verify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -64,7 +65,7 @@ const ManageUser = () => {
     });
   };
 
-  const userUnVeifyHandelar = (id) => {
+  const userUnVeifyHandelar = (id, userEmail) => {
     swal({
       title: "Are you sure?",
       text: "Unverifyed This User!",
@@ -74,7 +75,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users-unverify?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-unverify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -105,7 +106,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
           {
             method: "DELETE",
             headers: {
@@ -137,15 +138,17 @@ const ManageUser = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/make-admin?email=${user.email}&id=${id}`, {
-          method: "PUT",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/make-admin?email=${user.email}&id=${id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.modifiedCount) {
               refetch();
               swal("Create Admin Role Successfully!", {
@@ -168,7 +171,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/remove-admin?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-admin?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {
@@ -192,6 +195,9 @@ const ManageUser = () => {
 
   return (
     <section className="w-full">
+      <Helmet>
+        <title>Manage User - Mobile Mart</title>
+      </Helmet>
       <h3 className="text-2xl text-center capitalize  md:text-left mx-4  font-semibold text-accent">
         {role ? (
           <span>
@@ -271,14 +277,14 @@ const ManageUser = () => {
                 <td>
                   {user.userStatus ? (
                     <button
-                      onClick={() => userUnVeifyHandelar(user?._id)}
+                      onClick={() => userUnVeifyHandelar(user?._id, user.email)}
                       className="btn btn-sm bg-red-600 text-white"
                     >
                       Unverify
                     </button>
                   ) : (
                     <button
-                      onClick={() => userVeifyHandelar(user?._id)}
+                      onClick={() => userVeifyHandelar(user?._id, user?.email)}
                       className="btn btn-sm bg-green-600 text-white"
                     >
                       Verify

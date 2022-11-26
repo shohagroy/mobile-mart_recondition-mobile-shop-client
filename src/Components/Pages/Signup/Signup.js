@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 
 const Signup = () => {
   const [authError, setAuthError] = useState("");
@@ -13,10 +14,6 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const imgbbHostKey = process.env.REACT_APP_imgbb_host_key;
-
-  console.log(imgbbHostKey);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,25 +28,11 @@ const Signup = () => {
     setLoading(true);
     setAuthError("");
 
-    const fromData = new FormData();
-    fromData.append("image", data.images);
-    const userImages = data.images[0];
-
     const newUser = {
       name: data.name,
       email: data.email,
       role: data.role,
-      avatar: userImages,
     };
-
-    // fetch(`https://api.imgbb.com/1/upload?key=${imgbbHostKey}`, {
-    //   method: "POST",
-    //   body: userImages,
-    // })
-    //   .then((res) => res.json())
-    //   .then((imgData) => {
-    //     console.log(imgData);
-    //   });
 
     createUser(data.email, data.password)
       .then((result) => {
@@ -60,13 +43,16 @@ const Signup = () => {
 
             const userEmail = { email: user.email };
             if (userEmail) {
-              fetch(`http://localhost:5000/jwt`, {
-                method: "POST",
-                headers: {
-                  "content-type": "application/json",
-                },
-                body: JSON.stringify(newUser),
-              })
+              fetch(
+                `https://mobile-mart-recondition-mobile-shop-server.vercel.app/jwt`,
+                {
+                  method: "POST",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify(newUser),
+                }
+              )
                 .then((res) => res.json())
                 .then((data) => {
                   setLoading(false);
@@ -88,6 +74,9 @@ const Signup = () => {
   };
   return (
     <section className="max-w-7xl mx-auto">
+      <Helmet>
+        <title>Create New Accoutn - Mobile Mart</title>
+      </Helmet>
       <div className=" flex  justify-center items-center">
         <div className=" w-96 shadow shadow-lg flex flex-col justify-center items-center p-6  rounded-md">
           <h3 className="text-xl font-semibold text-gray-700">Sign Up</h3>
@@ -178,11 +167,6 @@ const Signup = () => {
                   Seller
                 </label>
               </div>
-              <input
-                type="file"
-                {...register("images")}
-                className="input p-3 input-bordered w-full"
-              />
             </div>
             <div>
               <p className="text-center font-bold text-red-600">{authError}</p>
