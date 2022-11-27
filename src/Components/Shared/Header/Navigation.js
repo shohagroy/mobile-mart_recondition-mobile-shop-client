@@ -17,7 +17,7 @@ const Navigation = () => {
     queryKey: ["data", user, addCart],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
+        `http://localhost:5000/add-carts?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -37,15 +37,12 @@ const Navigation = () => {
   }
 
   const cartRemoveHandelar = (id) => {
-    fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}&id=${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:5000/add-carts?email=${user.email}&id=${id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount > 0) {

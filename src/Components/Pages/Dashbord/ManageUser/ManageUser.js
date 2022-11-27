@@ -18,7 +18,7 @@ const ManageUser = () => {
     queryKey: ["users", "removeUserHandelar", user, role],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&role=${role}`,
+        `http://localhost:5000/users?email=${user.email}&role=${role}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -44,7 +44,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-verify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
+          `http://localhost:5000/users-verify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -75,7 +75,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-unverify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
+          `http://localhost:5000/users-unverify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -106,7 +106,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
+          `http://localhost:5000/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
           {
             method: "DELETE",
             headers: {
@@ -138,15 +138,12 @@ const ManageUser = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/make-admin?email=${user.email}&id=${id}`,
-          {
-            method: "PUT",
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-          }
-        )
+        fetch(`http://localhost:5000/make-admin?email=${user.email}&id=${id}`, {
+          method: "PUT",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.modifiedCount) {
@@ -171,7 +168,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-admin?email=${user.email}&id=${id}`,
+          `http://localhost:5000/remove-admin?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {

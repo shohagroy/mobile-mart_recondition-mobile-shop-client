@@ -14,9 +14,7 @@ const Home = () => {
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await fetch(
-        "https://mobile-mart-recondition-mobile-shop-server.vercel.app/display-products"
-      );
+      const res = await fetch("http://localhost:5000/display-products");
       const data = await res.json();
       return data;
     },

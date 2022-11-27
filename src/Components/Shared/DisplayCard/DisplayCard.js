@@ -5,6 +5,7 @@ import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import hotProduct from "../../../assets/hot_badg.webp";
 import lookinGood from "../../../assets/lokking_good.gif";
 import swal from "sweetalert";
+import { useQuery } from "@tanstack/react-query";
 
 const DisplayCard = ({ category }) => {
   const { user, logOut, addCart, setAddCart } = useContext(AuthContex);
@@ -26,17 +27,14 @@ const DisplayCard = ({ category }) => {
       userEmail: user.email,
     };
 
-    fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-        body: JSON.stringify(cartItems),
-      }
-    )
+    fetch(`http://localhost:5000/add-carts?email=${user.email}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+      body: JSON.stringify(cartItems),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {
@@ -54,14 +52,39 @@ const DisplayCard = ({ category }) => {
       });
   };
 
-  const addBookNowHandelar = (id) => {
+  const addBookNowHandelar = (event, product) => {
+    event.preventDefault();
+    const from = event.target;
+    const bookingId = product._id;
+
+    const customerName = from.customerName.value;
+    const customerEmail = from.customerEmail.value;
+    const customerLocation = from.customerLocation.value;
+    const customerPhone = from.customerPhone.value;
+
+    // console.log(bookingId);
+
+    product._id = "";
+
+    const bookingProduct = {
+      ...product,
+      customerName,
+      customerEmail,
+      customerLocation,
+      customerPhone,
+      bookingId,
+    };
+
+    // console.log(bookingProduct);
     fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-booking?email=${user.email}&id=${id}`,
+      `http://localhost:5000/add-booking?email=${user.email}&id=${bookingId}`,
       {
-        method: "PUT",
+        method: "POST",
         headers: {
+          "content-type": "application/json",
           authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
         },
+        body: JSON.stringify(bookingProduct),
       }
     )
       .then((res) => res.json())
@@ -78,6 +101,7 @@ const DisplayCard = ({ category }) => {
             icon: "success",
           });
           navigate("../dashbord/my-booking");
+          setAddCart(!addCart);
         }
       });
   };
@@ -194,12 +218,66 @@ const DisplayCard = ({ category }) => {
             Add to Cart
           </button>
 
-          <button
+          {/* <button
             onClick={() => addBookNowHandelar(category._id)}
             className="btn btn-sm btn-primary text-white"
           >
             Book Now
-          </button>
+          </button> */}
+          <label
+            htmlFor="my-modal-3"
+            className="btn btn-sm btn-primary text-white"
+          >
+            Book now
+          </label>
+        </div>
+        {/* The button to open modal */}
+
+        {/* Put this part before </body> tag */}
+        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box relative">
+            <label
+              htmlFor="my-modal-3"
+              className="btn btn-sm btn-primary text-white btn-circle absolute right-2 top-2"
+            >
+              ✕
+            </label>
+            <h3 className="text-lg font-bold">{category.productName}</h3>
+            <form onSubmit={(event) => addBookNowHandelar(event, category)}>
+              <input
+                type="text"
+                name="customerName"
+                value={user.displayName}
+                disabled
+                className="input input-bordered my-1 w-full"
+              />
+              <input
+                type="text"
+                name="customerEmail"
+                value={user.email}
+                disabled
+                className="input input-bordered my-1 w-full"
+              />
+              <input
+                type="text"
+                name="customerLocation"
+                placeholder="Your Location"
+                className="input input-bordered my-1 w-full"
+              />
+              <input
+                type="text"
+                placeholder="Your Phone Numer"
+                name="customerPhone"
+                className="input input-bordered my-1 w-full"
+              />
+              <input
+                type="submit"
+                value="Submit"
+                className="input btn btn-primary btn-outline text-white input-bordered my-1 w-full"
+              />
+            </form>
+          </div>
         </div>
       </div>
     </div>

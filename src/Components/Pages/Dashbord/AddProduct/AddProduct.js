@@ -31,7 +31,7 @@ const AddProduct = () => {
     queryKey: ["categoris"],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
+        `http://localhost:5000/categorys?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -80,17 +80,14 @@ const AddProduct = () => {
             isBooked: false,
           };
 
-          fetch(
-            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
-            {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-              },
-              body: JSON.stringify(productInfo),
-            }
-          )
+          fetch(`http://localhost:5000/products?email=${user.email}`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+            body: JSON.stringify(productInfo),
+          })
             .then((res) => res.json())
             .then((data) => {
               if (data.insertedId) {
@@ -112,17 +109,14 @@ const AddProduct = () => {
 
     const category = event.target.category.value;
 
-    fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-        body: JSON.stringify({ category }),
-      }
-    )
+    fetch(`http://localhost:5000/categorys?email=${user.email}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+      body: JSON.stringify({ category }),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {

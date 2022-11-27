@@ -10,9 +10,7 @@ const ShowProduct = () => {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["data", "products"],
     queryFn: async () => {
-      const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products-categorys`
-      );
+      const res = await fetch(`http://localhost:5000/products-categorys`);
       const data = res.json();
       return data;
     },

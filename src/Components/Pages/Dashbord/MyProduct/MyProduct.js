@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import { useQuery } from "@tanstack/react-query";
-import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import { Link } from "react-router-dom";
 import swal from "sweetalert";
 import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
+import paidImg from "../../../../assets/paid-5025785_1280.webp";
 
 const MyProduct = () => {
   const { user } = useContext(AuthContex);
@@ -17,7 +17,7 @@ const MyProduct = () => {
     queryKey: ["products", "removeProductHandelar", user],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
+        `http://localhost:5000/products?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -42,15 +42,12 @@ const MyProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}&id=${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-          }
-        )
+        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
@@ -76,7 +73,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-advertise?email=${user.email}&id=${addItem._id}`,
+          `http://localhost:5000/add-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {
@@ -107,7 +104,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/-advertise?email=${user.email}&id=${addItem._id}`,
+          `http://localhost:5000/remove-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {
@@ -150,7 +147,7 @@ const MyProduct = () => {
           </thead>
           <tbody>
             {products?.map((product, i) => (
-              <tr key={i}>
+              <tr key={i} className="relative">
                 <th>{i + 1}</th>
                 <td>
                   <div className="avatar">
@@ -167,24 +164,39 @@ const MyProduct = () => {
                 <td className="text-primary font-semibold">
                   ${product?.sellPrice}
                 </td>
-                <td>
-                  {product.isBoosted ? (
-                    <button
-                      onClick={() => removeAdvertiseHandelar(product)}
-                      className="btn btn-primary btn-sm text-white "
-                    >
-                      Remove
-                    </button>
+                {product.paymentStatus === "PAID" ? (
+                  <td>
+                    <h2 className="text-xl text-green-500 font-semibold">
+                      Already Paid
+                    </h2>{" "}
+                  </td>
+                ) : (
+                  <td>
+                    {product.isBoosted ? (
+                      <button
+                        onClick={() => removeAdvertiseHandelar(product)}
+                        className="btn btn-primary btn-sm text-white "
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => addAdvertiseHandelar(product)}
+                        className="btn bg-green-600 text-white btn-sm "
+                      >
+                        Advertise
+                      </button>
+                    )}
+                  </td>
+                )}
+
+                <td className="text-primary font-bold">
+                  {product.paymentStatus === "PAID" ? (
+                    <span>Delivery Panding</span>
                   ) : (
-                    <button
-                      onClick={() => addAdvertiseHandelar(product)}
-                      className="btn bg-green-600 text-white btn-sm "
-                    >
-                      Advertise
-                    </button>
+                    <span>UNSOLE</span>
                   )}
                 </td>
-                <td className="text-primary font-bold">Unsole</td>
                 <td>
                   <button
                     onClick={() => removeProductHandelar(product._id)}
@@ -193,6 +205,13 @@ const MyProduct = () => {
                     Remove
                   </button>
                 </td>
+                {product.paymentStatus && (
+                  <img
+                    src={paidImg}
+                    className="w-[70px] absolute top-[0] left-[40px]"
+                    alt="Paid Image"
+                  />
+                )}
               </tr>
             ))}
           </tbody>

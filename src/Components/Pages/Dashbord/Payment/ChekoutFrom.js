@@ -17,17 +17,14 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/create-payment-intent?email=${user.email}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-        body: JSON.stringify(bookingProduct),
-      }
-    )
+    fetch(`http://localhost:5000/create-payment-intent?email=${user.email}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+      body: JSON.stringify(bookingProduct),
+    })
       .then((res) => res.json())
       .then((data) => setCustomerSecret(data.clientSecret));
   }, [bookingProduct]);
@@ -85,17 +82,14 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
         customerPhone,
       };
 
-      fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/payments?email=${user.email}`,
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-          body: JSON.stringify(paymentProducts),
-        }
-      )
+      fetch(`http://localhost:5000/payments?email=${user.email}`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(paymentProducts),
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.insertedId) {

@@ -5,14 +5,11 @@ const UseSeller = (email) => {
   const [sellerLoading, setSellerLoading] = useState(true);
 
   useEffect(() => {
-    fetch(
-      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/chekSeller/${email}`,
-      {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:5000/chekSeller/${email}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (!data.isSeller) {

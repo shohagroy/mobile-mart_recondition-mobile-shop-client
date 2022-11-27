@@ -18,7 +18,7 @@ const MyBooking = () => {
     queryKey: ["bookingProducts"],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/booking-product?email=${user.email}`,
+        `http://localhost:5000/booking-product?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -46,8 +46,9 @@ const MyBooking = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
+        console.log(id);
         fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-booking?email=${user.email}&id=${id}`,
+          `http://localhost:5000/remove-booking?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {
@@ -109,7 +110,7 @@ const MyBooking = () => {
                 </td>
                 <td>
                   <Link
-                    to={`../../product-details/${booking._id}`}
+                    to={`../../product-details/${booking.bookingId}`}
                     className="hover:text-primary text-2xl font-semibold"
                   >
                     {booking?.productName}
@@ -130,7 +131,7 @@ const MyBooking = () => {
                     <p>{booking?.transactionId}</p>
                   ) : (
                     <Link
-                      to={`../payment/${booking._id}`}
+                      to={`../payment/${booking.bookingId}`}
                       className="btn mx-auto bg-green-600 text-white btn-sm"
                     >
                       Payment
@@ -144,7 +145,7 @@ const MyBooking = () => {
                     </p>
                   ) : (
                     <button
-                      onClick={() => cancelBookingHandelar(booking._id)}
+                      onClick={() => cancelBookingHandelar(booking.bookingId)}
                       className="btn btn-sm bg-red-600 text-white"
                     >
                       Cancel

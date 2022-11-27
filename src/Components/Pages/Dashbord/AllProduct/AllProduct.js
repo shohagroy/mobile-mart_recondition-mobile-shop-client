@@ -17,7 +17,7 @@ const AllProduct = () => {
     queryKey: ["allProducts", "removeProductHandelar", user],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/all-products?email=${user.email}`,
+        `http://localhost:5000/all-products?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -42,15 +42,12 @@ const AllProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(
-          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}&id=${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-          }
-        )
+        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount > 0) {

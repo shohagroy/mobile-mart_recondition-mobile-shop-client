@@ -8,13 +8,11 @@ import LoadingLoader from "../Loader/LoadingLoader";
 const DisplayProduct = ({ name, categoryName }) => {
   // const { category: name } = categoryName;
 
-  console.log(name);
-
   const { data: fatchResult, isLoading } = useQuery({
     queryKey: ["data", name],
     queryFn: async () => {
       const res = await fetch(
-        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/all-product?categorys=${name}`
+        `http://localhost:5000/all-product?categorys=${name}`
       );
       const data = res.json();
       return data;

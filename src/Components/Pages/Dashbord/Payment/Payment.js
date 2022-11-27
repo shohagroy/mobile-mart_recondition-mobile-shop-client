@@ -12,10 +12,18 @@ const Payment = () => {
   const { user } = useContext(AuthContex);
   const bookingProduct = useLoaderData();
   const [customerAddress, setCustomerAddress] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
+  const [customerNumber, setCustomerNumber] = useState("");
 
-  const { category, location, phone, productName, sellPrice, seller } =
-    bookingProduct;
+  const {
+    category,
+    location,
+    customerLocation,
+    customerPhone,
+    phone,
+    productName,
+    sellPrice,
+    seller,
+  } = bookingProduct;
 
   return (
     <div className="w-full">
@@ -55,15 +63,17 @@ const Payment = () => {
               onChange={(e) => setCustomerAddress(e.target.value)}
               type="text"
               required
+              defaultValue={customerLocation}
               className={`input  font-semibold text-xl input-bordered input m-2 w-full  `}
               placeholder="Shipping Address (Full)"
             />
 
             <input
-              type="number"
+              type="text"
               required
-              onChange={(e) => setCustomerPhone(e.target.value)}
+              onChange={(e) => setCustomerNumber(e.target.value)}
               className={`input  font-semibold text-xl input-bordered input m-2 w-full `}
+              defaultValue={customerPhone}
               placeholder="Your Phone Number Number"
             />
 
@@ -120,7 +130,6 @@ const Payment = () => {
 
           <div className="card-actions justify-center">
             <label
-              disabled={!customerPhone || !customerAddress}
               htmlFor="payment-modal"
               className="btn btn-primary text-white"
             >
@@ -144,7 +153,7 @@ const Payment = () => {
                   <ChekoutFrom
                     bookingProduct={bookingProduct}
                     customerAddress={customerAddress}
-                    customerPhone={customerPhone}
+                    customerNumber={customerNumber}
                   ></ChekoutFrom>
                 </Elements>
               </div>

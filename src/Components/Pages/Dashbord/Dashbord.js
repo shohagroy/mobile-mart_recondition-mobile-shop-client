@@ -80,6 +80,13 @@ const Dashbord = () => {
               {isAdmin && (
                 <>
                   <div className="w-full mt-1 bg-primary text-center">
+                    <Link to="my-product">
+                      <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">
+                        My Product
+                      </button>
+                    </Link>
+                  </div>
+                  <div className="w-full mt-1 bg-primary text-center">
                     <Link to="add-product">
                       <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">
                         add Product
@@ -137,6 +144,13 @@ const Dashbord = () => {
 
           {isAdmin && (
             <>
+              <div className="w-full mt-1 bg-primary text-center">
+                <Link to="my-product">
+                  <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">
+                    My Product
+                  </button>
+                </Link>
+              </div>
               <div className="w-full my-1 bg-primary text-center">
                 <Link to="add-product">
                   <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">

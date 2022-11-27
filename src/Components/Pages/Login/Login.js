@@ -25,16 +25,13 @@ const Login = () => {
         const userEmail = { email: user.email };
 
         if (userEmail) {
-          fetch(
-            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/jwtLogin`,
-            {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(userEmail),
-            }
-          )
+          fetch(`http://localhost:5000/jwtLogin`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(userEmail),
+          })
             .then((res) => res.json())
             .then((data) => {
               if (data.jwtToken) {
