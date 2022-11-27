@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DisplayProduct from "../../Shared/DisplayProduct/DisplayProduct";
 import LoadingLoader from "../../Shared/Loader/LoadingLoader";
 import Banar from "../Home/Banar/Banar";
 import { Helmet } from "react-helmet";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const ShowProduct = () => {
-  const [categoryName, setCategoryName] = useState("");
+  const { categoryName, setCategoryName } = useContext(AuthContex);
+  // const [categoryName, setCategoryName] = useState("");
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["data", "products"],
     queryFn: async () => {

@@ -71,7 +71,7 @@ const Navigation = () => {
           </div>
           <div className="flex-none">
             <div className="hidden md:block">
-              <Link to="/">
+              <Link to="../">
                 <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
                   Home
                 </button>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import DisplayCard from "../../Shared/DisplayCard/DisplayCard";
 import LoadingLoader from "../../Shared/Loader/LoadingLoader";
@@ -8,9 +8,28 @@ import redx from "../../../assets/redx.png";
 import { Helmet } from "react-helmet";
 import image1 from "../../../assets/img_1.png";
 import register from "../../../assets/register-now_3.gif";
+import axios from "axios";
+import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 
 const Home = () => {
+  const { categoryName, setCategoryName } = useContext(AuthContex);
   const boostedProduct = useLoaderData();
+  const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useState(() => {
+    setLoading(true);
+    axios
+      .get(`http://localhost:5000/products-categorys`)
+      .then((res) => {
+        setCategory(res.data);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  console.log(category);
+
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
@@ -24,6 +43,10 @@ const Home = () => {
     return <LoadingLoader />;
   }
 
+  if (loading) {
+    return <LoadingLoader />;
+  }
+
   return (
     <section className="max-w-7xl mx-auto min-h-[90vh]">
       <Helmet>
@@ -33,6 +56,29 @@ const Home = () => {
         <Banar />
       </div>
       <div className="my-12 ">
+        <h2 className="font-semibold text-xl p-2">Browse Items by Category</h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4  lg:grid-cols-6 gap-4 p-4">
+          {category.map((name) => (
+            <div key={name._id} className="">
+              <Link to="/product">
+                <button
+                  onClick={() => setCategoryName(name.category)}
+                  className=" btn btn-sm btn-primary w-full  text-white rounded-xl text-center"
+                >
+                  <span className="text-xl font-bold">{name.category}</span>
+                </button>
+              </Link>
+            </div>
+          ))}
+          <button
+            // onClick={() => setCategoryName("")}
+            className="btn btn-sm bg-green-500 hover:bg-green-700 w-full  text-white rounded-xl text-center"
+          >
+            <span className="text-xl  font-bold"> Show All</span>
+          </button>
+        </div>
+
         <div className="p-6 rounded-md my-10  bg-gray-50">
           <div className="flex justify-between items-center">
             <div className="flex items-center">

@@ -64,6 +64,9 @@ const GobalAuthProvaider = ({ children }) => {
     return () => unSubscribe();
   }, [user]);
 
+  // category wise show product
+  const [categoryName, setCategoryName] = useState("");
+
   const authInfo = {
     setAddCart,
     addCart,
@@ -74,6 +77,8 @@ const GobalAuthProvaider = ({ children }) => {
     updateUser,
     login,
     googleSignIn,
+    setCategoryName,
+    categoryName,
   };
   return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };
