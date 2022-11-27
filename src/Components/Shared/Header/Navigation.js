@@ -82,6 +82,11 @@ const Navigation = () => {
                   Product
                 </button>
               </Link>
+              <Link to="/blog">
+                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                  Blog
+                </button>
+              </Link>
 
               {user.email ? (
                 <>
@@ -104,11 +109,6 @@ const Navigation = () => {
                   </button>
                 </Link>
               )}
-              <Link to="/blog">
-                <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                  Blog
-                </button>
-              </Link>
             </div>
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -269,6 +269,13 @@ const Navigation = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/blog">
+                    <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
+                      Blog
+                    </button>
+                  </Link>
+                </li>
+                <li>
                   {user.email ? (
                     <>
                       <Link to="/dashbord">
@@ -290,13 +297,6 @@ const Navigation = () => {
                       </button>
                     </Link>
                   )}
-                </li>
-                <li>
-                  <Link to="/blog">
-                    <button className="text-xl mx-2 text-accent hover:text-primary font-semibold ">
-                      Blog
-                    </button>
-                  </Link>
                 </li>
               </ul>
             </div>

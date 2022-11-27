@@ -5,6 +5,7 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -47,6 +48,11 @@ const GobalAuthProvaider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  const googleSignIn = (provider) => {
+    setLoader(true);
+    return signInWithPopup(auth, provider);
+  };
+
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -67,6 +73,7 @@ const GobalAuthProvaider = ({ children }) => {
     createUser,
     updateUser,
     login,
+    googleSignIn,
   };
   return <AuthContex.Provider value={authInfo}>{children}</AuthContex.Provider>;
 };

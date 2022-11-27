@@ -4,11 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const Signup = () => {
   const [authError, setAuthError] = useState("");
   const [saveUser, setSaveUser] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { googleSignIn } = useContext(AuthContex);
   const {
     register,
     handleSubmit,
@@ -54,7 +57,7 @@ const Signup = () => {
                 .then((data) => {
                   setLoading(false);
                   if (data.jwtToken) {
-                    localStorage.setItem("token", data.jwtToken);
+                    localStorage.setItem("mobile-mart", data.jwtToken);
                     toast.success("User Create Successfully!");
                     navigate(path, { relative: true });
                   }
@@ -69,6 +72,44 @@ const Signup = () => {
         console.error(err);
       });
   };
+
+  const provaider = new GoogleAuthProvider();
+  const googleSignInHandelar = () => {
+    googleSignIn(provaider)
+      .then((res) => {
+        const user = res.user;
+        const newUser = {
+          name: user.displayName,
+          email: user.email,
+          role: "customer",
+        };
+
+        if (user) {
+          fetch(`http://localhost:5000/jwt`, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              setLoading(false);
+              if (data.jwtToken) {
+                localStorage.setItem("mobile-mart", data.jwtToken);
+                toast.success("User Create Successfully!");
+                navigate(path, { relative: true });
+              }
+            });
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        setAuthError(err.code.slice(5));
+        console.error(err);
+      });
+  };
+
   return (
     <section className="max-w-7xl mx-auto">
       <Helmet>
@@ -189,7 +230,10 @@ const Signup = () => {
             </div>
           </form>
           <div className="divider my-4">OR</div>
-          <button className="btn hover:bg-primary btn-outline w-full">
+          <button
+            onClick={googleSignInHandelar}
+            className="btn hover:bg-primary btn-outline w-full"
+          >
             CONTINUE WITH GOOGLE
           </button>
         </div>
