@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
+import Blog from "../../Components/Pages/Blog/Blog";
 import AddProduct from "../../Components/Pages/Dashbord/AddProduct/AddProduct";
 import AllProduct from "../../Components/Pages/Dashbord/AllProduct/AllProduct";
 import Dashbord from "../../Components/Pages/Dashbord/Dashbord";
@@ -36,6 +37,10 @@ const route = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/blog",
+        element: <Blog />,
       },
       {
         path: "/product",
