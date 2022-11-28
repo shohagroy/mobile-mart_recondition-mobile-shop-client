@@ -27,13 +27,16 @@ const Login = () => {
         const userEmail = { email: user.email };
 
         if (userEmail) {
-          fetch(`http://localhost:5000/jwtLogin`, {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(userEmail),
-          })
+          fetch(
+            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/jwtLogin`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(userEmail),
+            }
+          )
             .then((res) => res.json())
             .then((data) => {
               if (data.jwtToken) {
@@ -63,13 +66,16 @@ const Login = () => {
         };
 
         if (user) {
-          fetch(`http://localhost:5000/jwt`, {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(newUser),
-          })
+          fetch(
+            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/jwt`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(newUser),
+            }
+          )
             .then((res) => res.json())
             .then((data) => {
               setLoading(false);

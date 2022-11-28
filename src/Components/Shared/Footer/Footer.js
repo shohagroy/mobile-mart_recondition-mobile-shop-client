@@ -160,16 +160,14 @@ const Footer = () => {
                   <span>
                     <i className="fa-solid text-red-600 fa-location-dot"></i>
                   </span>{" "}
-                  <span className="ml-1">
-                    2nd Floor, Saleha Plaza, GL Roy Road, Rangpur-5400
-                  </span>
+                  <span className="ml-1">Rangpur, Bangladesh</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
         <div className="py-6 text-sm text-center text-gray-400">
-          Travel Point © 2019 All Rights Reserved.
+          Mobile Mart © 2022 All Rights Reserved.
         </div>
       </footer>
     </div>

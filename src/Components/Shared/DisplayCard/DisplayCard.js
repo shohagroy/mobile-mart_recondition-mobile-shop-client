@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
 import hotProduct from "../../../assets/hot_badg.webp";
 import lookinGood from "../../../assets/lokking_good.gif";
 import swal from "sweetalert";
-import { useQuery } from "@tanstack/react-query";
 
 const DisplayCard = ({ category }) => {
   const { user, logOut, addCart, setAddCart } = useContext(AuthContex);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -27,14 +27,17 @@ const DisplayCard = ({ category }) => {
       userEmail: user.email,
     };
 
-    fetch(`http://localhost:5000/add-carts?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify(cartItems),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(cartItems),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {
@@ -54,6 +57,7 @@ const DisplayCard = ({ category }) => {
 
   const addBookNowHandelar = (event, product) => {
     event.preventDefault();
+    setBookingLoading(true);
     const from = event.target;
     const bookingId = product._id;
 
@@ -62,9 +66,7 @@ const DisplayCard = ({ category }) => {
     const customerLocation = from.customerLocation.value;
     const customerPhone = from.customerPhone.value;
 
-    // console.log(bookingId);
-
-    product._id = "";
+    delete product._id;
 
     const bookingProduct = {
       ...product,
@@ -75,9 +77,8 @@ const DisplayCard = ({ category }) => {
       bookingId,
     };
 
-    // console.log(bookingProduct);
     fetch(
-      `http://localhost:5000/add-booking?email=${user.email}&id=${bookingId}`,
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-booking?email=${user.email}&id=${bookingId}`,
       {
         method: "POST",
         headers: {
@@ -102,6 +103,7 @@ const DisplayCard = ({ category }) => {
           });
           navigate("../dashbord/my-booking");
           setAddCart(!addCart);
+          setBookingLoading(false);
         }
       });
   };
@@ -125,7 +127,7 @@ const DisplayCard = ({ category }) => {
       )}
 
       <img
-        className="p-3 object-cover object-fill rounded-2xl md:w-[290px]"
+        className="p-3 object- rounded-2xl md:w-[300px] md:h-[400px]"
         src={category?.images}
         alt={category.productName}
       />
@@ -135,14 +137,12 @@ const DisplayCard = ({ category }) => {
         <div className="mb-6">
           <p>
             Category:{" "}
-            <span className="font-bold text-primary">{category.category}</span>
+            <span className=" font-semibold">{category.category}</span>
           </p>
 
           <p>
             Purchase Date:{" "}
-            <span className="font-bold text-primary">
-              {category.purchaseDate}!
-            </span>
+            <span className="font-semibold">{category.purchaseDate}!</span>
           </p>
           <p>
             Price:{" "}
@@ -151,11 +151,11 @@ const DisplayCard = ({ category }) => {
             </span>
           </p>
           <p>
-            Location:{" "}
-            <span className="font-bold text-primary">{category.location}</span>
+            Location: <span className="font-semibold">{category.location}</span>
           </p>
 
           <p className="">
+            <span className="font-semibold">Details:</span>
             <span
               dangerouslySetInnerHTML={{
                 __html: category.description.slice(0, 220),
@@ -218,27 +218,27 @@ const DisplayCard = ({ category }) => {
             Add to Cart
           </button>
 
-          {/* <button
-            onClick={() => addBookNowHandelar(category._id)}
-            className="btn btn-sm btn-primary text-white"
-          >
-            Book Now
-          </button> */}
-          <label
-            htmlFor="my-modal-3"
-            className="btn btn-sm btn-primary text-white"
-          >
-            Book now
-          </label>
+          {user.email ? (
+            <label
+              htmlFor="book-now-modal"
+              className="btn btn-sm btn-primary text-white"
+            >
+              Book now
+            </label>
+          ) : (
+            <Link to="/login" className="btn btn-sm btn-primary text-white">
+              Book now
+            </Link>
+          )}
         </div>
         {/* The button to open modal */}
 
         {/* Put this part before </body> tag */}
-        <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+        <input type="checkbox" id="book-now-modal" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box relative">
             <label
-              htmlFor="my-modal-3"
+              htmlFor="book-now-modal"
               className="btn btn-sm btn-primary text-white btn-circle absolute right-2 top-2"
             >
               ✕
@@ -247,6 +247,7 @@ const DisplayCard = ({ category }) => {
             <form onSubmit={(event) => addBookNowHandelar(event, category)}>
               <input
                 type="text"
+                required
                 name="customerName"
                 value={user.displayName}
                 disabled
@@ -254,6 +255,7 @@ const DisplayCard = ({ category }) => {
               />
               <input
                 type="text"
+                required
                 name="customerEmail"
                 value={user.email}
                 disabled
@@ -261,21 +263,27 @@ const DisplayCard = ({ category }) => {
               />
               <input
                 type="text"
+                required
                 name="customerLocation"
                 placeholder="Your Location"
                 className="input input-bordered my-1 w-full"
               />
               <input
                 type="text"
+                required
                 placeholder="Your Phone Numer"
                 name="customerPhone"
                 className="input input-bordered my-1 w-full"
               />
-              <input
+
+              <button
                 type="submit"
-                value="Submit"
-                className="input btn btn-primary btn-outline text-white input-bordered my-1 w-full"
-              />
+                className={`btn  btn-primary text-white w-full mt-2 btn-outline ${
+                  bookingLoading && "loading"
+                }`}
+              >
+                {bookingLoading ? "Loading..." : "Submit"}
+              </button>
             </form>
           </div>
         </div>

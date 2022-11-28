@@ -6,13 +6,13 @@ import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import LoadingLoader from "../../../Shared/Loader/LoadingLoader";
 import DashbordLoader from "../../../Shared/DashbordLoader/DashbordLoader";
 import { Helmet } from "react-helmet";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContex);
   const [value, setValue] = useState("");
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [addNew, setAddNew] = useState("");
@@ -31,7 +31,7 @@ const AddProduct = () => {
     queryKey: ["categoris"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/categorys?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -80,14 +80,17 @@ const AddProduct = () => {
             isBooked: false,
           };
 
-          fetch(`http://localhost:5000/products?email=${user.email}`, {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-            },
-            body: JSON.stringify(productInfo),
-          })
+          fetch(
+            `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+              },
+              body: JSON.stringify(productInfo),
+            }
+          )
             .then((res) => res.json())
             .then((data) => {
               if (data.insertedId) {
@@ -109,14 +112,17 @@ const AddProduct = () => {
 
     const category = event.target.category.value;
 
-    fetch(`http://localhost:5000/categorys?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify({ category }),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/categorys?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify({ category }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {

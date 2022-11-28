@@ -18,7 +18,7 @@ const ManageUser = () => {
     queryKey: ["users", "removeUserHandelar", user, role],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/users?email=${user.email}&role=${role}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&role=${role}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -44,7 +44,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users-verify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-verify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -75,7 +75,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users-unverify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users-unverify?email=${user.email}&id=${id}&userEmail=${userEmail}`,
           {
             method: "PUT",
             headers: {
@@ -106,7 +106,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/users?email=${user.email}&id=${id}&deleteEmail=${email}`,
           {
             method: "DELETE",
             headers: {
@@ -138,12 +138,15 @@ const ManageUser = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/make-admin?email=${user.email}&id=${id}`, {
-          method: "PUT",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/make-admin?email=${user.email}&id=${id}`,
+          {
+            method: "PUT",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.modifiedCount) {
@@ -168,7 +171,7 @@ const ManageUser = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/remove-admin?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-admin?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {
@@ -212,7 +215,6 @@ const ManageUser = () => {
           <thead>
             <tr>
               <th></th>
-              <th>Images</th>
               <th>name</th>
               <th>email</th>
               <th>Verify</th>
@@ -222,7 +224,7 @@ const ManageUser = () => {
                     All Users
                   </option>
                   <option value="seller">Seller</option>
-                  <option value="customer">Buyers</option>
+                  <option value="customer">Customer</option>
                 </select>
               </th>
               <th>make admin</th>
@@ -234,22 +236,12 @@ const ManageUser = () => {
               <tr key={i}>
                 <th>{i + 1}</th>
                 <td>
-                  <div className="avatar">
-                    <div className="w-24 rounded-full border-2 border-primary">
-                      <img
-                        src="https://placeimg.com/192/192/people"
-                        alt={user?.name}
-                      />
-                    </div>
-                  </div>
-                </td>
-                <td>
                   <div className="relative">
                     <Link className="hover:text-primary ">
                       <p>{user?.name}</p>
                     </Link>
                     <span
-                      className={`badge-md bg-none  -top-3 -right-2 ${
+                      className={`badge-md bg-none  -top-2 -left-4 ${
                         user.userStatus ? "absolute" : "hidden"
                       }`}
                     >

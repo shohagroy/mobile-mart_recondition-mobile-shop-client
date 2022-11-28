@@ -5,6 +5,7 @@ import { useLoaderData } from "react-router-dom";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 import ChekoutFrom from "./ChekoutFrom";
 import { Helmet } from "react-helmet";
+import axios from "axios";
 
 const stripePromise = loadStripe(process.env.REACT_APP_strip_pk);
 
@@ -154,6 +155,7 @@ const Payment = () => {
                     bookingProduct={bookingProduct}
                     customerAddress={customerAddress}
                     customerNumber={customerNumber}
+                    // product={product}
                   ></ChekoutFrom>
                 </Elements>
               </div>

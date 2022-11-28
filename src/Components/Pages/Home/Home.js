@@ -20,7 +20,9 @@ const Home = () => {
   useState(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/products-categorys`)
+      .get(
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products-categorys`
+      )
       .then((res) => {
         setCategory(res.data);
         setLoading(false);
@@ -28,12 +30,12 @@ const Home = () => {
       .catch((error) => console.log(error));
   }, []);
 
-  console.log(category);
-
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/display-products");
+      const res = await fetch(
+        "https://mobile-mart-recondition-mobile-shop-server.vercel.app/display-products"
+      );
       const data = await res.json();
       return data;
     },
@@ -50,7 +52,7 @@ const Home = () => {
   return (
     <section className="max-w-7xl mx-auto min-h-[90vh]">
       <Helmet>
-        <title>Well Cone to Mobile Mart</title>
+        <title>WellCome to Mobile Mart</title>
       </Helmet>
       <div className="w-full  ">
         <Banar />

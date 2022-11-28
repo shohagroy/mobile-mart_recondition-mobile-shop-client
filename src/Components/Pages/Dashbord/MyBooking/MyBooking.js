@@ -18,7 +18,7 @@ const MyBooking = () => {
     queryKey: ["bookingProducts"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/booking-product?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/booking-product?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -46,9 +46,8 @@ const MyBooking = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        console.log(id);
         fetch(
-          `http://localhost:5000/remove-booking?email=${user.email}&id=${id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-booking?email=${user.email}&id=${id}`,
           {
             method: "PUT",
             headers: {

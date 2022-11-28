@@ -4,9 +4,15 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { AuthContex } from "../../../../GobalAuthProvaider/GobalAuthProvaider";
 
-const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
+const ChekoutFrom = ({
+  bookingProduct,
+  customerAddress,
+  product,
+  customerPhone,
+}) => {
   const { user } = useContext(AuthContex);
-  const { sellPrice, productName, images, sellerEmail, _id } = bookingProduct;
+  const { sellPrice, productName, images, sellerEmail, bookingId } =
+    bookingProduct;
   const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -17,14 +23,17 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch(`http://localhost:5000/create-payment-intent?email=${user.email}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-      body: JSON.stringify(bookingProduct),
-    })
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/create-payment-intent?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(bookingProduct),
+      }
+    )
       .then((res) => res.json())
       .then((data) => setCustomerSecret(data.clientSecret));
   }, [bookingProduct]);
@@ -77,19 +86,22 @@ const ChekoutFrom = ({ bookingProduct, customerAddress, customerPhone }) => {
         sellerEmail,
         images,
         transactionId: paymentIntent.id,
-        bookingId: _id,
+        bookingId,
         customerAddress,
         customerPhone,
       };
 
-      fetch(`http://localhost:5000/payments?email=${user.email}`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
-        },
-        body: JSON.stringify(paymentProducts),
-      })
+      fetch(
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/payments?email=${user.email}`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: `bearer ${localStorage.getItem("mobile-mart")}`,
+          },
+          body: JSON.stringify(paymentProducts),
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.insertedId) {

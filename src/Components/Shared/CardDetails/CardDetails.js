@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
+import Banar from "../../Pages/Home/Banar/Banar";
+import register from "../../../assets/register-now_3.gif";
+import image1 from "../../../assets/img_1.png";
+import toast from "react-hot-toast";
 
 const CardDetails = () => {
-  const { user, logOut } = useContext(AuthContex);
+  const { user, logOut, addCart, setAddCart } = useContext(AuthContex);
   const product = useLoaderData();
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -25,13 +30,79 @@ const CardDetails = () => {
     sellerEmail,
   } = product;
 
-  const addBookNowHandelar = (id) => {
-    fetch(`http://localhost:5000/add-booking?email=${user.email}&id=${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-      },
-    })
+  const addTocatdHandelar = () => {
+    const cartItems = {
+      cartId: _id,
+      productName,
+      images,
+      sellPrice,
+      phone,
+      seller,
+      category,
+      userEmail: user.email,
+    };
+
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-carts?email=${user.email}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(cartItems),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.massege === "unauthorized access") {
+          navigate("/login");
+          return logOut();
+        }
+        if (data.massege) {
+          toast.error("This Product is Already Added!");
+          return;
+        }
+        if (data.insertedId) {
+          setAddCart(!addCart);
+          toast.success(`${cartItems.productName} Add to Cart Successfully!`);
+        }
+      });
+  };
+
+  const addBookNowHandelar = (event) => {
+    event.preventDefault();
+    setBookingLoading(true);
+    const from = event.target;
+    const bookingId = product._id;
+
+    const customerName = from.customerName.value;
+    const customerEmail = from.customerEmail.value;
+    const customerLocation = from.customerLocation.value;
+    const customerPhone = from.customerPhone.value;
+
+    delete product._id;
+
+    const bookingProduct = {
+      ...product,
+      customerName,
+      customerEmail,
+      customerLocation,
+      customerPhone,
+      bookingId,
+    };
+
+    fetch(
+      `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-booking?email=${user.email}&id=${bookingId}`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+        },
+        body: JSON.stringify(bookingProduct),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.massege === "unauthorized access") {
@@ -46,6 +117,8 @@ const CardDetails = () => {
             icon: "success",
           });
           navigate("../dashbord/my-booking");
+          setAddCart(!addCart);
+          setBookingLoading(false);
         }
       });
   };
@@ -53,8 +126,31 @@ const CardDetails = () => {
   return (
     <section className="max-w-7xl mx-auto">
       <div className="mt-10">
-        <div className="h-72 bg-red-300">
-          <h2>banar</h2>
+        <div className="">
+          <Banar />
+        </div>
+        <div className="h-[200px] my-10 w-full flex justify-between items-center border border-primary border-2 rounded-lg p-8">
+          <div>
+            <img
+              className="w-[220px] object-cover"
+              src={image1}
+              alt="Sell Mobile"
+            />
+          </div>
+          <div className="text-center hidden">
+            <h2 className="text-primary font-bold text-4xl capitalize">
+              Start making money!
+            </h2>
+            <p className="font-semibold text-2xl capitalize">
+              Do you have Mobile Phone to sell? Post your first ad and earn
+              money!
+            </p>
+          </div>
+          <div>
+            <Link to="../../signUp">
+              <img className="w-[180px]" src={register} alt="register now " />
+            </Link>
+          </div>
         </div>
         <div className="m-10">
           <div className="card lg:card-side bg-base-100 shadow-xl">
@@ -68,43 +164,35 @@ const CardDetails = () => {
               </figure>
             </div>
             <div className="card-body">
-              <h2 className="font-bold text-3xl text-primary">{productName}</h2>
+              <h2 className="font-bold text-4xl text-primary">{productName}</h2>
               <div className="font-semibold">
                 <p>
                   Category:{" "}
-                  <span className="text-primary font-semibold text-xl">
-                    {category}
-                  </span>
+                  <span className="font-semibold text-xl">{category}</span>
                 </p>
                 <p>
                   Condition:{" "}
-                  <span className="text-primary font-semibold text-xl">
-                    {condition}!
-                  </span>
+                  <span className="font-semibold text-xl">{condition}!</span>
                 </p>
                 <p>
                   Use:{" "}
-                  <span className="text-primary font-semibold text-xl">
-                    {purchaseDate}
-                  </span>
+                  <span className=" font-semibold text-xl">{purchaseDate}</span>
                 </p>
                 <p>
                   Marcket Price:{" "}
-                  <del className="text-primary font-semibold text-xl">
-                    {marcketPrice} TK
+                  <del className=" font-bold text-primary text-xl">
+                    ${marcketPrice}
                   </del>
                 </p>
                 <p className="text-2xl">
                   Price:{" "}
-                  <span className="text-primary text-3xl font-semibold text-xl">
-                    {sellPrice} TK
+                  <span className="text-primary text-3xl font-bold text-xl">
+                    ${sellPrice}
                   </span>
                 </p>
                 <p>
                   Location:{" "}
-                  <span className="text-primary font-semibold text-xl">
-                    {location}
-                  </span>
+                  <span className=" font-semibold text-xl">{location}</span>
                 </p>
                 <div className="flex justify-start mt-3 items-center">
                   <h3 className="font-semibold text-xl mr-4">
@@ -139,16 +227,85 @@ const CardDetails = () => {
                     Post Date:{" "}
                     <span className=" font-semibold text-xl">{postDate}</span>
                   </p>
+                  <div className="mt-5 font-semibold  text-xl md:text-2xl">
+                    <span className="text-primary">{productName}</span> Full
+                    Specifications
+                  </div>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: description }} />
               </div>
-              <div className="card-actions justify-end">
+              <div className="card-actions right-0 m-4 absolute bottom-0">
                 <button
-                  onClick={() => addBookNowHandelar(_id)}
-                  className="btn btn-primary text-white font-bold"
+                  onClick={addTocatdHandelar}
+                  className="btn btn-outline btn-primary text-white"
                 >
-                  Book Now
+                  Add to Cart
                 </button>
+
+                {user.email ? (
+                  <label
+                    htmlFor="my-modal-3"
+                    className="btn btn-primary text-white"
+                  >
+                    Book now
+                  </label>
+                ) : (
+                  <Link to="/login" className="btn btn-primary text-white">
+                    Book now
+                  </Link>
+                )}
+              </div>
+
+              {/* The button to open modal */}
+
+              {/* Put this part before </body> tag */}
+              <input type="checkbox" id="my-modal-3" className="modal-toggle" />
+              <div className="modal">
+                <div className="modal-box relative">
+                  <label
+                    htmlFor="my-modal-3"
+                    className="btn btn-sm btn-primary text-white btn-circle absolute right-2 top-2"
+                  >
+                    ✕
+                  </label>
+                  <h3 className="text-lg font-bold">{category.productName}</h3>
+                  <form onSubmit={(event) => addBookNowHandelar(event)}>
+                    <input
+                      type="text"
+                      name="customerName"
+                      value={user.displayName}
+                      disabled
+                      className="input input-bordered my-1 w-full"
+                    />
+                    <input
+                      type="text"
+                      name="customerEmail"
+                      value={user.email}
+                      disabled
+                      className="input input-bordered my-1 w-full"
+                    />
+                    <input
+                      type="text"
+                      name="customerLocation"
+                      placeholder="Your Location"
+                      className="input input-bordered my-1 w-full"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Your Phone Numer"
+                      name="customerPhone"
+                      className="input input-bordered my-1 w-full"
+                    />
+                    <button
+                      type="submit"
+                      className={`btn btn-primary w-full mt-2 text-white ${
+                        bookingLoading && "loading"
+                      }`}
+                    >
+                      {bookingLoading ? "Loading..." : "Submit"}
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

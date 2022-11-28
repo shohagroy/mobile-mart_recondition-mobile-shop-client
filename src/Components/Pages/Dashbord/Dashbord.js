@@ -94,14 +94,14 @@ const Dashbord = () => {
                     </Link>
                   </div>
 
-                  <div className="w-full  bg-primary text-center">
+                  <div className="w-full mt-1  bg-primary text-center">
                     <Link to="all-product">
                       <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">
                         all Product
                       </button>
                     </Link>
                   </div>
-                  <div className="w-full bg-primary text-center">
+                  <div className="w-full mt-1 bg-primary text-center">
                     <Link to="manage-user">
                       <button className="  text-white btn btn-primary w-full text-xl btn-md border-none">
                         manage user

@@ -17,7 +17,7 @@ const MyProduct = () => {
     queryKey: ["products", "removeProductHandelar", user],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/products?email=${user.email}`,
+        `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}`,
         {
           headers: {
             authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
@@ -42,12 +42,15 @@ const MyProduct = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`http://localhost:5000/products?email=${user.email}&id=${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
-          },
-        })
+        fetch(
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/products?email=${user.email}&id=${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("mobile-mart")}`,
+            },
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.deletedCount) {
@@ -73,7 +76,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/add-advertise?email=${user.email}&id=${addItem._id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/add-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {
@@ -83,7 +86,6 @@ const MyProduct = () => {
         )
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.modifiedCount > 0) {
               refetch();
               swal(`Your ${addItem.productName} Product has been Boosted`, {
@@ -104,7 +106,7 @@ const MyProduct = () => {
     }).then((willDelete) => {
       if (willDelete) {
         fetch(
-          `http://localhost:5000/remove-advertise?email=${user.email}&id=${addItem._id}`,
+          `https://mobile-mart-recondition-mobile-shop-server.vercel.app/remove-advertise?email=${user.email}&id=${addItem._id}`,
           {
             method: "PUT",
             headers: {
@@ -114,7 +116,6 @@ const MyProduct = () => {
         )
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.modifiedCount > 0) {
               refetch();
               swal(`Your ${addItem.productName} Product has been Remove!`, {
@@ -167,7 +168,7 @@ const MyProduct = () => {
                 {product.paymentStatus === "PAID" ? (
                   <td>
                     <h2 className="text-xl text-green-500 font-semibold">
-                      Already Paid
+                      Already Sole
                     </h2>{" "}
                   </td>
                 ) : (
