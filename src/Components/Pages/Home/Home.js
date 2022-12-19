@@ -10,6 +10,7 @@ import image1 from "../../../assets/img_1.png";
 import register from "../../../assets/register-now_3.gif";
 import axios from "axios";
 import { AuthContex } from "../../../GobalAuthProvaider/GobalAuthProvaider";
+import Carosole from "./Carosole/Carosole";
 
 const Home = () => {
   const { categoryName, setCategoryName } = useContext(AuthContex);
@@ -55,7 +56,8 @@ const Home = () => {
         <title>WellCome to Mobile Mart</title>
       </Helmet>
       <div className="w-full  ">
-        <Banar />
+        {/* <Banar /> */}
+        <Carosole />
       </div>
       <div className="my-12 ">
         <h2 className="font-semibold text-xl p-2">Browse Items by Category</h2>
